@@ -1,0 +1,177 @@
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <title>
+      Sistema de administracion azurduy y asociados
+    </title>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.js"></script>
+    <!-- Nucleo Icons -->
+    <link href="/css/nucleo-icons.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="/css/black-dashboard.css" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+   
+    <link href="/css/calendarStyle.css" rel="stylesheet" />
+    
+  </head>
+  
+  <body >
+    <div class="wrapper">
+      <div class="sidebar" >
+        <!--
+          Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
+      -->
+        <div class="sidebar-wrapper" >
+          <div class="logo">
+            <a href="javascript:void(0)" class="simple-text logo-mini">
+              <img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="">
+            </a>
+            <a href="javascript:void(0)" style="font-size: small;" class="simple-text logo-normal">
+              Azurduy & Asociados
+            </a>
+          </div>
+          <ul class="nav">
+            <li >
+              <a href="/index">
+                <i class="tim-icons icon-chart-pie-36"></i>
+                <p>Calendario</p>
+              </a>
+            </li>
+            <% if (role === 'Abogado Jefe') { %>
+              <!-- Opciones adicionales para el Abogado Jefe -->
+              <li>
+                  <a href="/clientes">
+                      <i class="tim-icons icon-pin"></i>
+                      <p>Clientes</p>
+                  </a>
+              </li>
+              <li>
+                  <a href="/usuarios">
+                      <i class="tim-icons icon-atom"></i>
+                      <p>Usuarios</p>
+                  </a>
+              </li>
+          <% } %>
+            <li>
+              <a href="/solicitudes">
+                <i class="tim-icons icon-bell-55"></i>
+                <p>Solicitudes</p>
+              </a>
+            </li>
+            <li>
+              <a href="/profile">
+                <i class="tim-icons icon-single-02"></i>
+                <p>Perfil</p>
+              </a>
+            </li>
+            <li>
+              <a href="/casos">
+                <i class="tim-icons icon-puzzle-10"></i>
+                <p>Mis Casos</p>
+              </a>
+            </li>
+            <!--
+               <li>
+              <a href="./">
+                <i class="tim-icons icon-align-center"></i>
+                <p>Mis Tareas</p>
+              </a>
+            </li>-->
+            
+           
+          </ul>
+        </div>
+      </div>
+      <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+          <div class="container-fluid">
+            <div class="navbar-wrapper">
+              <div class="navbar-toggle d-inline">
+                <button type="button" class="navbar-toggler">
+                  <span class="navbar-toggler-bar bar1"></span>
+                  <span class="navbar-toggler-bar bar2"></span>
+                  <span class="navbar-toggler-bar bar3"></span>
+                </button>
+              </div>
+              <a class="navbar-brand" href="javascript:void(0)">Shark</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navigation">
+              <ul class="navbar-nav ml-auto">
+                
+                
+                <li class="dropdown nav-item">
+                  <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                    <div class="photo">
+                      <img src="https://storage.googleapis.com/primerstorage/20230423_212006_MicrosoftTeams-image (6).png" alt="Profile Photo">
+                    </div>
+                    <b class="caret d-none d-lg-block d-xl-block"></b>
+                    <p class="d-lg-none">
+                      Log out
+                    </p>
+                  </a>
+                  <ul class="dropdown-menu dropdown-navbar">
+                    <li class="nav-link"><a href="/profile" class="nav-item dropdown-item">Profile</a></li>
+                    <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Settings</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li class="nav-link"><a href="/logout" class="nav-item dropdown-item">Log out</a></li>
+                  </ul>
+                </li>
+                <li class="separator d-lg-none"></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <i class="tim-icons icon-simple-remove"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+         
+  document.addEventListener('DOMContentLoaded', function() {
+    
+      $(this).siblings().removeClass('active');
+      $(this).addClass('active');
+
+      var new_color = $(this).data('red');
+
+      if ($sidebar.length != 0) {
+        $sidebar.attr('data', new_color);
+      }
+
+      if ($main_panel.length != 0) {
+        $main_panel.attr('data', new_color);
+      }
+
+      if ($full_page.length != 0) {
+        $full_page.attr('filter-color', new_color);
+      }
+
+      if ($sidebar_responsive.length != 0) {
+        $sidebar_responsive.attr('data', new_color);
+      }
+   
+  });
+        </script>
+        
+        <!-- End Navbar -->
+        
+        

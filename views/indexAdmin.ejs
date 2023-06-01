@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<%-include('../views/layouts/LayoutIn.ejs')%>
+<!--Inicio del modal de crear citas-->
+
+<div id="citaModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title"style="color: white;">Crear Cita</h2>
+      </div>
+      <div class="modal-body">
+        <form style="background-color: #2a2f47;">
+          
+          <div class="form-group" >
+            <label for="title" style="color: white;">Motivo de la cita:</label>
+            <input type="text" id="title" name="motivo" class="form-control custom-input" style="height: 40px; width: 150px; font-size: larger;" required/>
+          </div>
+          <div class="form-group">
+            <label for="date" style="color: white;">Fecha:</label>
+            <input type="text" id="date" name="fecha" class="form-control custom-input" style="height: 60px; width: 150px; font-size: larger;" readonly />
+          </div>
+          <div class="form-group">
+            <label for="time" style="color: white;">Hora (HH:mm):</label>
+            
+            <select id="time" name="hora" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
+
+          </div>
+          <label for="cliente" style="color: white;">Cliente:</label>
+          <select id="cliente" name="cliente" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="xclose" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" id="save-event">Guardar</button>
+          </div>
+        </form>
+      </div>
+      
+    
+    </div>
+  </div>
+</div>
+
+<!--Fin del modal para citas-->
+
+<!--inicio del modal pregunta-->
+<div id="selectModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Crear Evento</h2>
+        <span id="selectClose" class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <button id="citaBtn" class="btn btn-primary">Crear Cita</button>
+        <button id="reunionBtn" class="btn btn-primary">Crear Reunión</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--fin del modal pregunta-->
+
+<!--Inicio de modal reuniones-->
+<div id="reunionModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: white;" >Crear Reunión</h2>
+      </div>
+      <div class="modal-body">
+        <form style="background-color: #2a2f47;">
+          <div class="form-group">
+            <label for="asunto" style="color: white;">Asunto de la reunión:</label>
+            <input type="text" id="asuntoReunion" name="asunto" class="form-control custom-input" required/>
+          </div>
+          <div class="form-group">
+            <label for="lugar" style="color: white;">Lugar:</label>
+            <input type="text" id="lugarReunion" name="lugar" class="form-control custom-input" required/>
+          </div>
+          <div class="form-group">
+            <label for="reunionDate" style="color: white;">Fecha:</label>
+            <input type="text" id="reunionDate" name="fecha" class="form-control custom-input" readonly />
+          </div>
+          <div class="form-group">
+            <label for="reunionTime" style="color: white;">Hora Inicio (HH:mm):</label>
+            <select id="reunionTimeInicio" name="hora" class="form-control custom-input"style="color: black; height: 60px; width: 150px;" required></select>
+          </div>
+          <div class="form-group">
+            <label for="reunionTimeFin" style="color: white;">Hora Fin (HH:mm):</label>
+            <select id="reunionTimeFin" name="horaFin" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
+          </div>
+          <!-- Campo de búsqueda de usuarios -->
+          <div class="form-group">
+            <label for="searchUser" style="color: white;">Buscar usuario:</label>
+            <input type="text" id="searchUser" name="searchUser" class="form-control custom-input" />
+          </div>
+          <!-- Tabla de resultados de búsqueda -->
+          <div class="form-group">
+            <table id="searchResults" class="table table" >
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody style="width:800px; color: white;">
+                <!-- Los resultados de la búsqueda se insertarán aquí -->
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="reunionClose" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" id="save-reunion">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--fin de modal reuniones-->
+<!--inicio del Info modal-->
+<div id="eventModal" class="modal">
+  <div class="modalinfo-dialog">
+    <div class="modalinfo-content">
+      <div class="modalinfo-header">
+        <h2 class="modalinfo-title"style="color: black;">Detalles de la cita</h2>
+        <span id="eventClose" class="close">&times;</span>
+      </div>
+      <div class="modalinfo-body">
+        <p id="eventMotivo" style="color: black;"></p>
+        <p id="eventFecha"style="color: black;"></p>
+        <p id="eventHora"style="color: black;"></p>
+        <p id="eventHoraFin"style="color: black;"></p>
+        <p id="eventEstado"style="color: black;"></p>
+        <button class="btn-primary">eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Fin del Info Modal-->
+<style>
+   /* Estilos del modal */
+   .modal {
+    display: none; /* Ocultar el modal por defecto */
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.479);
+  }
+
+  .modal-content {
+    background-color: #1d1d1d93;
+    
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+  }
+  .modal-body{
+    background-color: #1d1d1d93;
+  }
+  form{
+    background-color: #1d1d1d93;
+  }
+  .modalinfo-title{
+    background-color: #1d1d1d93;
+  }
+</style>
+<!--Inicio del modal de detalles de la reunión-->
+<div id="reunionDetailsModal" class="modal" >
+  <div class="modalinfo-dialog">
+    <div class="modalinfo-content">
+      <div class="modalinfo-header">
+        <h2 class="modalinfo-title"style="color: black;">Detalles de la reunión</h2>
+        <span id="reunionDetailsClose" class="close">&times;</span>
+      </div>
+      <div class="modalinfo-body">
+        <p id="reunionAsunto" style="color: black;"></p>
+        <p id="reunionLugar" style="color: black;"></p>
+        <p id="reunionFecha"style="color: black;"></p>
+        <p id="reunionHoraInicio"style="color: black;"></p>
+        <p id="reunionHoraFin"style="color: black;"></p>
+        <p id="reunionEstado"style="color: black;"></p>
+        <button class="btn-primary">eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Inicio del modal de detalles de la reunión-->
+<div id="reunionDetailsModal" class="modal">
+  <div class="modalinfo-dialog">
+    <div class="modalinfo-content">
+      <div class="modalinfo-header">
+        <h2 class="modalinfo-title"style="color: black;">Detalles de la reunión</h2>
+        <span id="reunionDetailsClose" class="close">&times;</span>
+      </div>
+      <div class="modalinfo-body">
+        <p id="reunionAsunto" style="color: black;"></p>
+        <p id="reunionLugar" style="color: black;"></p>
+        <p id="reunionFecha"style="color: black;"></p>
+        <p id="reunionHoraInicio"style="color: black;"></p>
+        <p id="reunionHoraFin"style="color: black;"></p>
+        <p id="reunionEstado"style="color: black;"></p>
+        <button class="btn-primary">eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Fin del modal de detalles de la reunión-->
+
+      <div class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card card-chart">
+              
+                
+                  
+                  <div id="calendar"></div>
+                
+              
+              
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card card-tasks">
+              <div class="card-header ">
+                <h6 class="title d-inline">Tasks(5)</h6>
+                <p class="card-category d-inline">today</p>
+                <div class="dropdown">
+                  <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">
+                    <i class="tim-icons icon-settings-gear-63"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#pablo">Action</a>
+                    <a class="dropdown-item" href="#pablo">Another action</a>
+                    <a class="dropdown-item" href="#pablo">Something else</a>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body ">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" value="">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="title">Update the Documentation</p>
+                          <p class="text-muted">Dwuamish Head, Seattle, WA 8:47 AM</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-pencil"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" value="" checked="">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="title">GDPR Compliance</p>
+                          <p class="text-muted">The GDPR is a regulation that requires businesses to protect the personal data and privacy of Europe citizens for transactions that occur within EU member states.</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-pencil"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" value="">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="title">Solve the issues</p>
+                          <p class="text-muted">Fifty percent of all respondents said they would be more likely to shop at a company </p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-pencil"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" value="">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="title">Release v2.0.0</p>
+                          <p class="text-muted">Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-pencil"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" value="">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="title">Export the processed files</p>
+                          <p class="text-muted">The report also shows that consumers will not easily forgive a company once a breach exposing their personal data occurs. </p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-pencil"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" value="">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="title">Arival at export process</p>
+                          <p class="text-muted">Capitol Hill, Seattle, WA 12:34 AM</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-pencil"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h4 class="card-title"> Simple Table</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary">
+                      <tr>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Country
+                        </th>
+                        <th>
+                          City
+                        </th>
+                        <th class="text-center">
+                          Salary
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          Dakota Rice
+                        </td>
+                        <td>
+                          Niger
+                        </td>
+                        <td>
+                          Oud-Turnhout
+                        </td>
+                        <td class="text-center">
+                          $36,738
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Minerva Hooper
+                        </td>
+                        <td>
+                          Curaçao
+                        </td>
+                        <td>
+                          Sinaai-Waas
+                        </td>
+                        <td class="text-center">
+                          $23,789
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Sage Rodriguez
+                        </td>
+                        <td>
+                          Netherlands
+                        </td>
+                        <td>
+                          Baileux
+                        </td>
+                        <td class="text-center">
+                          $56,142
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Philip Chaney
+                        </td>
+                        <td>
+                          Korea, South
+                        </td>
+                        <td>
+                          Overland Park
+                        </td>
+                        <td class="text-center">
+                          $38,735
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Doris Greene
+                        </td>
+                        <td>
+                          Malawi
+                        </td>
+                        <td>
+                          Feldkirchen in Kärnten
+                        </td>
+                        <td class="text-center">
+                          $63,542
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Mason Porter
+                        </td>
+                        <td>
+                          Chile
+                        </td>
+                        <td>
+                          Gloucester
+                        </td>
+                        <td class="text-center">
+                          $78,615
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Jon Porter
+                        </td>
+                        <td>
+                          Portugal
+                        </td>
+                        <td>
+                          Gloucester
+                        </td>
+                        <td class="text-center">
+                          $98,615
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+  
+  <!--   Core JS Files   -->
+  <script src="/js/core/jquery.min.js"></script>
+  <script src="/js/core/popper.min.js"></script>
+  <script src="/js/core/bootstrap.min.js"></script>
+  <script src="/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/js/black-dashboard.min.js?v=1.0.0"></script><!-- Black Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/js/demo.js"></script>
+  <script>
+    $(document).ready(function() {
+      $().ready(function() {
+        $sidebar = $('.sidebar');
+        $navbar = $('.navbar');
+        $main_panel = $('.main-panel');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+        sidebar_mini_active = true;
+        white_color = false;
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+
+
+        $('.fixed-plugin a').click(function(event) {
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+        });
+
+        $('.fixed-plugin .background-color span').click(function() {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data', new_color);
+          }
+
+          if ($main_panel.length != 0) {
+            $main_panel.attr('data', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data', new_color);
+          }
+        });
+
+        $('.switch-sidebar-mini input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            sidebar_mini_active = false;
+            blackDashboard.showSidebarMessage('Sidebar mini deactivated...');
+          } else {
+            $('body').addClass('sidebar-mini');
+            sidebar_mini_active = true;
+            blackDashboard.showSidebarMessage('Sidebar mini activated...');
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+        });
+
+        $('.switch-change-color input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (white_color == true) {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').removeClass('white-content');
+            }, 900);
+            white_color = false;
+          } else {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').addClass('white-content');
+            }, 900);
+
+            white_color = true;
+          }
+
+
+        });
+
+        $('.light-badge').click(function() {
+          $('body').addClass('white-content');
+        });
+
+        $('.dark-badge').click(function() {
+          $('body').removeClass('white-content');
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+
+    });
+  </script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS &&
+      TrackJS.install({
+        token: "ee6fab19c5a04ac1a32a645abde4613a",
+        application: "black-dashboard-free"
+      });
+  </script>
+  <script src="/js/calendar.js"></script>
+</body>
+
+</html>

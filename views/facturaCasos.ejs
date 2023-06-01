@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Factura</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="/css/factura-style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+<div id="app" class="col-11">
+
+  <h2>Factura</h2>
+
+  <div class="row my-3">
+    <div class="col-10">
+      <h1>Bufete de Abogados Azurduy Y Asociados</h1>
+      <p>La Paz-Bolivia - Calle Juan de la Riva N°1406, Esquina Loayza Edificio "Alborada"</p>
+      <p>Piso 13,</p>
+      <p>oficina 1301</p>
+    </div>
+    <div class="col-2">
+      <img src="https://storage.googleapis.com/primerstorage/logo%20ps.png" width="100%" height="100%" style="position: relative; right: 120%;"/>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row fact-info mt-3">
+    <div class="col-3">
+      <h5>Facturar a</h5>
+      <p>
+        <%= pagos[0].cliente.nombres %> <%= pagos[0].cliente.apellidos %>
+      </p>
+      <h5>NIT/CI Cliente:</h5>
+      <p>
+        <%= pagos[0].cliente.ci %> 
+      </p>
+    </div>
+    <div class="col-3">
+      <h5>Fecha de Pago</h5>
+      <% for(let i=0; i < pagos.length; i++) { %> <!-- Recorremos todos los pagos -->
+        <p><strong><%= pagos[i].fechaHora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></strong></p>
+        <% if(i !== pagos.length - 1) { %> <!-- Si no es el último pago, muestra un separador -->
+          <hr/>
+        <% } %>
+      <% } %>
+    </div>
+    <div class="col-3">
+      <h5>Hora de Pago</h5>
+      <% for(let i=0; i < pagos.length; i++) { %> <!-- Recorremos todos los pagos -->
+        <p><strong><%= pagos[i].fechaHora.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) %></strong></p>
+        <% if(i !== pagos.length - 1) { %> <!-- Si no es el último pago, muestra un separador -->
+          <hr/>
+        <% } %>
+      <% } %>
+    </div>
+    <div class="col-3">
+      <h5>Correo de Cliente</h5>
+      <p>
+        <%= pagos[0].cliente.email %> 
+      </p>
+    </div>
+  </div>
+
+  <div class="row my-5">
+    <table class="table table-borderless factura">
+      <thead>
+        <tr>
+          <th>Detalle</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% let total = 0; %> <!-- Agregamos una variable para almacenar el total -->
+        <% for(let i=0; i < pagos.length; i++) { %> <!-- Recorremos todos los pagos -->
+          <tr>
+            <td><%= pagos[i].detalle %></td>
+            <td><%= pagos[i].monto %> Bs</td>
+            <% total += pagos[i].monto; %> <!-- Sumamos el monto al total -->
+          </tr>
+        <% } %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Total Factura</th>
+          <th><%= total %> Bs</th> <!-- Mostramos el total -->
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="cond row">
+    <div class="col-12 mt-3">
+      <h4>Forma de Pago:</h4>
+      <p>Efectivo</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <button onclick="generarPDF()" class="btn btn-primary">Descargar PDF</button>
+  </div>
+</div>
+
+<script>
+  function generarPDF() {
+    const invoice = document.getElementById('app'); // Elige el elemento HTML que contiene la factura (puede variar según tu estructura)
+    
+    // Genera el PDF utilizando html2pdf.js
+    const options = {
+      filename: '<%= pagos[0].cliente.nombres %>-factura.pdf', // Establece el nombre del PDF según el cliente
+      image: { type: 'jpeg', quality: 0.98 }, // Configura la calidad de la imagen del PDF
+      html2canvas: { scale: 2 }, // Escala el contenido HTML para mejorar la calidad de la imagen
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Establece el formato y la orientación del PDF
+    };
+    html2pdf().from(invoice).set(options).save();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagos del Caso</title>
+</head>
+<body>
+  <%-include('../views/layouts/LayoutIn.ejs')%>
+  
+  <style>
+    .table-responsive {
+      overflow: hidden;
+    }
+  
+    @media (max-width: 767px) {
+      .table-responsive {
+        overflow: auto;
+      }
+    }
+  </style>
+  
+  <div class="content" style="margin-top: 20px;">
+    <h1 style="text-align: center;">Pagos del Caso</h1>
+  
+    <% if (pagos && pagos.length > 0) { %>
+      <div class="table-responsive">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid; padding: 8px;">Cliente</th>
+              <th style="border: 1px solid; padding: 8px;">Abogado</th>
+              <th style="border: 1px solid; padding: 8px;">Monto</th>
+              <th style="border: 1px solid; padding: 8px;">Motivo</th>
+              <th style="border: 1px solid; padding: 8px;">Acciones</th>
+            </tr>
+          </thead>
+          <style>
+            th{
+              border: black;
+              background-color: whitesmoke;
+            }
+            td{
+              color: whitesmoke;
+            }
+          </style>
+          <tbody>
+            <% pagos.forEach(pago => { %>
+              <tr>
+                <td style="border: 1px solid rgb(255, 255, 255); padding: 8px;"><%= pago.cliente.nombres %></td>
+                <td style="border: 1px solid rgb(255, 255, 255); padding: 8px;"><%= pago.abogado.nombres %></td>
+                <td style="border: 1px solid rgb(255, 255, 255); padding: 8px;"><%= pago.monto %></td>
+                <td style="border: 1px solid rgb(255, 255, 255); padding: 8px;"><%= pago.detalle %></td>
+                <td style="border: 1px solid rgb(255, 255, 255); padding: 8px;">
+                  <button onclick="window.location.href='/factura-pago/<%= pago._id %>'" style="background-color: rgb(0, 68, 255); color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">Generar Factura</button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <button onclick="window.location.href='/factura-casos/<%= pagos[0].caso._id %>'" style="background-color: rgb(0, 68, 255); color: white; border: none; border-radius: 4px; padding: 8px 16px; margin-top: 10px; cursor: pointer;">Generar Factura de Caso</button>
+    <% } else { %>
+      <p style="text-align: center;">No hay pagos asociados a este caso.</p>
+    <% } %>
+  
+    <button onclick="window.location.href='/casos'" style="background-color: rgb(255, 30, 0); color: white; border: none; border-radius: 4px; padding: 8px 16px; margin-top: 10px; cursor: pointer;">Volver a Casos</button>
+  </div>
+  
+  
+</body>
+</html>

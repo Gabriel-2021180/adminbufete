@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ingrese el código de invitación</title>
+  <style>
+    *,
+    *:before,
+    *:after {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #080710;
+      overflow: hidden;
+    }
+
+    .background {
+      width: 100%;
+      max-width: 430px;
+      height: 520px;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+    }
+
+    .background .shape {
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .shape:last-child {
+      background: linear-gradient(to right, #942833, #942833);
+      right: -30px;
+      bottom: -80px;
+    }
+
+    form {
+      width: 400px;
+      background-color: rgba(255, 255, 255, 0.13);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+      padding: 5% 3%;
+    }
+
+    form * {
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      outline: none;
+      border: none;
+    }
+
+    form h3 {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 42px;
+      text-align: center;
+    }
+
+    /* Media queries para hacer el formulario responsive */
+    @media (max-width: 768px) {
+      form {
+        width: 90%;
+        max-width: 400px;
+        padding: 5% 3%;
+      }
+
+      form h3 {
+        font-size: 32px;
+        line-height: 42px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      form {
+        width: 90%;
+        max-width: 400px;
+        padding: 5% 3%;
+      }
+
+      form h3 {
+        font-size: 32px;
+        line-height: 42px;
+      }
+    }
+
+    label {
+      display: block;
+      margin-top: 30px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    input {
+      display: block;
+      height: 50px;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.07);
+      border-radius: 3px;
+      padding: 0 10px;
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    ::placeholder {
+      color: #e5e5e5;
+    }
+
+    button {
+      margin-top: 50px;
+      width: 100%;
+      background-color: #ffffff;
+      color: #080710;
+      padding: 15px 0;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .logo-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: -1;
+    }
+
+    .logo-container img {
+      width: 200px;
+      height: auto;
+    }
+
+    .background-container {
+      position: relative;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+    }
+
+    .social {
+      margin-top: 30px;
+      display: flex;
+    }
+
+    .social div {
+      background: red;
+      width: 150px;
+      border-radius: 3px;
+      padding: 5px 10px 10px 5px;
+      background-color: rgba(255, 255, 255, 0.27);
+      color: #eaf0fb;
+      text-align: center;
+    }
+
+    .social div:hover {
+      background-color: rgba(255, 255, 255, 0.47);
+    }
+
+    .social .fb {
+      margin-left: 25px;
+    }
+
+    .social .go {
+      margin-left: 85px;
+    }
+
+    .social i {
+      margin-right: 4px;
+    }
+
+    .float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 40px;
+      right: 40px;
+      background-color: #942833;
+      color: white;
+      border-radius: 50px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+
+    .float:hover {
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+    }
+    .float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #942833;
+  color: white;
+  border-radius: 50px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.float:hover {
+  background-color: #731f28;
+  color: white;
+  text-decoration: none;
+}
+
+  </style>
+</head>
+<body>
+
+    <div class="background-container">
+        <div class="logo-container">
+          <img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="Logo del bufete de abogados">
+          <div class="text-container">
+            <h1 style="color: white; font-family: 'Poppins',sans-serif;">Azurduy & Asociados</h1>
+          </div>
+        </div>
+      </div>
+      <a href="/" class="float" style="font-family: 'Poppins',sans-serif;"><strong>Volver</strong> </a>
+
+  <form action="/enter-invitation-code" method="POST">
+    <h1 style="color: white;">Ingrese el código de invitación</h1>
+    
+    <input type="text" id="invitation-code" name="invitationCode" placeholder="Código de invitación" required>
+    <button type="submit">Enviar</button>
+    
+  </form>
+  
+</body>
+</html>
+

@@ -1,0 +1,52 @@
+.factura {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fact-info > div > h5 {
+  font-weight: bold;
+}
+
+.factura > thead {
+  border-top: solid 3px #000;
+  border-bottom: 3px solid #000;
+}
+
+.factura > thead > tr > th:nth-child(2),
+.factura > tbody > tr > td:nth-child(2),
+.factura > tfoot > tr > th:nth-child(2) {
+  width: 25%;
+}
+
+.factura > thead > tr > th:nth-child(n+3),
+.factura > tbody > tr > td:nth-child(n+3),
+.factura > tfoot > tr > th:nth-child(n+3) {
+  text-align: right;
+}
+
+.factura > tbody > tr > td:nth-child(1),
+.factura > tfoot > tr > th:nth-child(1) {
+  width: 50%;
+}
+
+.factura > tbody > tr > td:nth-child(2),
+.factura > tfoot > tr > th:nth-child(2) {
+  width: 25%;
+}
+
+.factura > tbody > tr > td:nth-child(3),
+.factura > tfoot > tr > th:nth-child(3) {
+  width: 12.5%;
+  text-align: right;
+}
+
+.factura > tbody > tr > td:nth-child(4),
+.factura > tfoot > tr > th:nth-child(4) {
+  width: 12.5%;
+  text-align: right;
+}
+
+.cond {
+  border-top: solid 2px #000;
+}

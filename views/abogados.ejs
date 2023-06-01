@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miembros del Bufete</title>
+  <style>
+    /* Estilos CSS */
+    .miembro {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .miembro img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .miembro .info {
+      flex: 1;
+    }
+
+    .miembro .nombre {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .miembro .descripcion {
+      font-size: 16px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Miembros del Bufete</h1>
+
+  <div id="miembros-container"></div>
+
+  <script>
+    // JavaScript para obtener los datos de los miembros del bufete y mostrarlos en la página
+
+    // Hacer una petición AJAX para obtener los datos de los abogados
+    fetch('/abogados')
+      .then(response => response.json())
+      .then(data => {
+        const miembrosContainer = document.getElementById('miembros-container');
+
+        // Recorrer los datos de los abogados y crear elementos HTML para mostrarlos
+        data.forEach(abogado => {
+          const miembroElement = document.createElement('div');
+          miembroElement.classList.add('miembro');
+
+          const imagenElement = document.createElement('img');
+          imagenElement.src = abogado.image;
+          miembroElement.appendChild(imagenElement);
+
+          const infoElement = document.createElement('div');
+          infoElement.classList.add('info');
+
+          const nombreElement = document.createElement('div');
+          nombreElement.classList.add('nombre');
+          nombreElement.textContent = `${abogado.nombres} ${abogado.apellidos}`;
+          infoElement.appendChild(nombreElement);
+
+          const descripcionElement = document.createElement('div');
+          descripcionElement.classList.add('descripcion');
+          descripcionElement.textContent = abogado.descripcion;
+          infoElement.appendChild(descripcionElement);
+
+          miembroElement.appendChild(infoElement);
+
+          miembrosContainer.appendChild(miembroElement);
+        });
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos de los abogados:', error);
+      });
+  </script>
+</body>
+</html>

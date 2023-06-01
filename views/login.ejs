@@ -1,0 +1,65 @@
+
+
+  <!-- 2da pagina -->
+  <!DOCTYPE html>
+  <html lang="en">
+     <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/login2style.css">
+        <script>
+          function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var eyeIcon = document.getElementById("eye");
+      
+            if (passwordField.type === "password") {
+              passwordField.type = "text";
+              eyeIcon.className = "fa fa-eye-slash";
+            } else {
+              passwordField.type = "password";
+              eyeIcon.className = "fa fa-eye";
+            }
+          }
+        </script>
+      </head>
+  <body>
+     <div class="background">
+       <div class="shape"></div>
+       <div class="shape"></div>
+     </div>
+     <div class="background-container">
+      <div class="logo-container">
+        <img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="Logo del bufete de abogados">
+        <div class="text-container">
+          <h1 style="color: white; font-family: 'Poppins',sans-serif;">Azurduy & Asociados</h1>
+        </div>
+      </div>
+    </div>
+     <form action="/login" method="post">
+       <% const disableInputs = error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes'); %>
+       <% if (error && error.length > 0) { %>
+         <div class="alert alert-danger" role="alert">
+           <%= error[0] %>
+         </div>
+       <% } %>
+       <h3>Iniciar sesión</h3>
+       <div class="go"><i class="">Bienvenid@ denuev@!</i></div>
+       <label for="username">Usuario</label>
+       <input type="text" name="username" placeholder="Usuario" id="username" <% if (disableInputs) { %>disabled<% } %>>
+   
+       <label for="password">Contraseña</label>
+       <input type="password"name="password" placeholder="Contraseña" id="password" <% if (disableInputs) { %>disabled<% } %>>
+       <span><i class="fa fa-eye" aria-hidden="true" type="button" id="eye" onclick="togglePassword()"></i></span>
+   
+      
+       <button type="submit" <%= error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes') ? 'disabled' : '' %> > Iniciar sesión </button>
+       <div class="">
+        <br>
+        <a href="/enter-invitation-code">Tienes un codigo? Registrate AQUI!</a>
+      </div>
+     </form>
+     
+   </body>
+  </html>
+  

@@ -1,0 +1,69 @@
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<%-include('../views/layouts/LayoutIn.ejs')%>
+<div class="content">
+    
+    <h2 style="color: white;">Lista de Usuarios</h2>
+        <input id="search-input" class="form-control" type="text" placeholder="Buscar usuarios...">
+    
+    <div style="overflow: hidden;">
+        <div class="text-right">
+    <a href="/registro" class="btn btn-primary">
+
+            
+        <i class="fas fa-plus"></i><i class="fas fa-user"></i>
+    </a>
+        <!-- Botón para abrir el modal -->
+        <button id="generate-code-button"  class="btn btn-primary fas fa-key" >Crear código</button>
+        
+        <!-- Modal -->
+        <div id="invitation-code-modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4);">
+            <div style="background-color: rgba(255, 255, 255, 0.8); margin: 15% auto; padding: 20px; border: 1px solid #6464647e; width: 30%; text-align: center;">
+              <h2 style="color: rgb(92, 92, 92); font-size: 36px;">Código de invitación</h2>
+              <p id="invitation-code" style="margin: 20px 0; font-size: 64px; font-weight: bold; color: black;"></p>
+              <div style="display: flex; justify-content: center; gap: 10px;">
+                <button id="copy-code-button" class="btn btn-primary btn-sm fas fa-copy" style="font-size: 24px;"></button>
+                <button id="close-modal-button" class="btn btn-danger btn-sm fas fa-times" style="font-size: 24px;"></button>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          
+        <!-- Modal -->
+
+</div>
+
+        <div id="user-table">
+        <%-include('../views/usuarios-tabla.ejs')%>
+    </div>
+    </div>
+           
+       
+    
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        // Detecta cuando el valor del cuadro de búsqueda cambia
+        jQuery('#search-input').on('input', function() {
+            // Obtiene el valor del cuadro de búsqueda
+            var searchTerm = jQuery(this).val();
+
+            // Realiza una solicitud GET al servidor para buscar usuarios
+            jQuery.get('/usuarios/buscar', { searchTerm: searchTerm }, function(data) {
+                // Actualiza la tabla de usuarios con los nuevos resultados
+                jQuery('#user-table').html(data);
+            });
+        });
+    });
+    
+    
+</script>
+<script src="/js/invitacioncode.js"></script>
+

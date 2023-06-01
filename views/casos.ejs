@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Casos</title>
+</head>
+<body>
+  <%-include('../views/layouts/LayoutIn.ejs')%>
+  
+  <div class="content">
+    <h1 style="color: white;">Mis Casos</h1>
+  
+    <% if (casos.length === 0) { %>
+      <p style="color: white;">No hay casos atendidos.</p>
+    <% } else { %>
+      <div class="table-responsive" style="overflow: hidden;">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th style="color: white; text-align: center;">Nombre del caso</th>
+              <th style="color: white; text-align: center;">Descripción</th>
+              <th style="color: white; text-align: center;">Cliente</th>
+              <th style="color: white; text-align: center;">Acciones</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <% casos.forEach(caso => { %>
+              <tr>
+                <td style="color: white; text-align: center;"><%= caso.nombrecaso %></td>
+                <td style="color: white; text-align: center; "><%= caso.descripcion %></td>
+                <td style="color: white; text-align: center;"><%= caso.cliente.username %></td>
+                <td>
+                  <a href="/casos/<%= caso._id %>" class="btn btn-primary" style="padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px; display: inline-block; margin-bottom: 5px;"> Detalles</a>
+               
+                  
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+  
+  <script src="https://kit.fontawesome.com/xxxxxxxxxx.js" crossorigin="anonymous"></script>
+</body>
+</html>

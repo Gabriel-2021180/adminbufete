@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Factura</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'><link rel="stylesheet" href="/css/factura-style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+</div><div id="app" class="col-11">
+
+    <h2>Factura</h2>
+
+    <div class="row my-3">
+      <div class="col-10">
+        <h1>Bufete de Abogados Azurduy Y Asociados</h1>
+        <p>La Paz-Bolivia -  Calle Juan de la Riva N°1406, Esquina Loayza Edificio "Alborada"   </p>
+        <p>Piso 13,</p>
+        <p>oficina 1301</p>
+      </div>
+      <div class="col-2">
+        <img src="~/images/Mil-Pasos_Negro.png" />
+      </div>
+    </div>
+  
+    <hr />
+  
+    <div class="row fact-info mt-3">
+      <div class="col-3">
+        <h5>Facturar a</h5>
+        <p>
+            <%= pago.cliente.nombres %> <%= pago.cliente.apellidos %>
+        </p>
+        <h5>NIT/CI Cliente:</h5>
+        <p>
+            <%= pago.cliente.ci %> 
+        </p>
+      </div>
+      <div class="col-3">
+        <h5>Correo de Cliente</h5>
+        <p>
+            <%= pago.cliente.email %> 
+        </p>
+      </div>
+      <div class="col-3">
+        <h5>N° de factura</h5>
+        <h5>Fecha</h5>
+        <h5>Hora</h5>
+      </div>
+      <div class="col-3">
+        <h5>103</h5>
+        <p><%= pago.fechaHora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></p>
+        <p><%= pago.fechaHora.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) %></p>
+      </div>
+    </div>
+  
+    <div class="row my-5">
+      <table class="table table-borderless factura">
+        <thead>
+          <tr>    
+            <th>Detalle</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= pago.detalle %></td>
+            <td><%= pago.monto %> Bs</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Total Factura</th>
+            <th><%= pago.monto %>Bs</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  
+    <div class="cond row">
+      <div class="col-12 mt-3">
+        <h4>Forma de Pago:</h4>
+        <p>Efectivo</p>
+      </div>
+    </div>
+</div>
+<!-- partial -->
+  
+</body>
+</html>

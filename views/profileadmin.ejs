@@ -1,0 +1,235 @@
+<head>
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body style="background-color: rgb(70, 70, 70);">
+  <%-include('../views/layouts/LayoutIn.ejs')%>
+  <div class="content">
+<div class="container">
+    <div class="main-body">
+    
+         
+
+      <style>
+        
+        /* Estilos del modal */
+        .modal {
+    display: none; /* Ocultar el modal por defecto */
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: -50% auto; /* Ajustar el margen superior para posicionar más arriba */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+  }
+      
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
+      
+        /* Estilos adicionales para el formulario */
+        .form-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+        }
+      
+        .form-row label {
+          width: 45%;
+        }
+      
+        .form-row input {
+          width: 50%;
+        }
+      </style>
+      
+      <!-- Modal existente -->
+      
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color: rgba(34, 34, 34, 0.836);">
+      <div class="modal-header" style="background-color: rgba(34, 34, 34, 0.836);">
+        <h5 class="modal-title" id="editModalLabel" style="background-color: rgba(34, 34, 34, 0.836); color: white;">Editar Perfil</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="background-color: rgba(255, 255, 255, 0.062);">
+        <form id="editForm" action="/profile/edit" method="post" enctype="multipart/form-data" style="color: white; align-content: center;">
+          <div>
+            <label for="editfechanac">Fecha de Nacimiento:</label>
+            <input type="date" id="fechanac" name="editfechanac" value="<%= user.fechanac.toISOString().split('T')[0] %>" style="color: black;">
+          </div>
+          <div>
+            <label for="editnombres">Nombre:</label>
+            <input type="text" id="nombres" name="editnombres" value="<%= user.nombres %>">
+          </div>
+          <div>
+            <label for="editapellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="editapellidos" value="<%= user.apellidos %>">
+          </div>
+          <div>
+            <label for="editusername">Username:</label>
+            <input type="text" id="username" name="editusername" value="<%= user.username %>">
+          </div>
+          <div>
+            <label for="editphone">Teléfono:</label>
+            <input type="text" id="editphone" name="editphone" value="<%= user.phone %>">
+          </div>
+          <div>
+            <label for="editdireccion">Dirección:</label>
+            <input type="text" id="direccion" name="editdireccion" value="<%= user.direccion %>">
+          </div>
+          <div>
+            <label for="editci">CI:</label>
+            <input type="text" id="ci" name="editci" value="<%= user.ci %>">
+          </div>
+          <!-- Agrega aquí el resto de los campos -->
+          <div class="image-upload-container">
+            <label for="editimage" class="image-upload-label">Nueva imagen de perfil:</label>
+            <input type="file" id="editimage" name="editimage" accept=".jpg,.jpeg,.png" class="image-upload-input" value="<%= user.image %>">
+          </div>
+          <button class="btn btn-primary" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+     
+
+
+          <div class="row gutters-sm" style="background-color: rgba(34, 34, 34, 0.836);">
+            <div class="col-md-4 mb-3" style="background-color: rgba(34, 34, 34, 0.836);">
+             
+            </div>
+            <div id="userInfo" style="width: 100%; background-color: rgba(34, 34, 34, 0.836); ">
+            <div class="col-md-12">
+              <div class="card mb-3">
+                <div class="card-body" style="background-color: #75757569; ">
+                  <div class="row">
+                    <div class="col-sm-3" style="text-align: right; margin-left:35%; margin-right: 0px;">
+                      <img src="<%= user.image %>" alt="Admin" class="" style="align-content: right;" width="150">
+                    </div>
+                    
+                    
+                    <div class="col-sm-3">
+                      
+                    </div>
+                    <div class="col-sm-9 text-secondary" style="text-align: center; margin-left:12%;">
+                      <%= user.nombres %> <%= user.apellidos %> 
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Correo</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <%= user.email %>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Telefono</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <%= user.phone %>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Cedula de Identidad (CI)</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <%= user.ci %>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Direccion</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <%= user.direccion %>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <!-- Botón para abrir el modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Editar Perfil</button> </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+    </div>
+  </div>
+    
+</div></div>
+ <!-- Script y código JavaScript existente -->
+      
+ <script>
+  // Script existente para abrir y cerrar el modal
+
+  // Obtener el modal
+  var modal = document.getElementById("editModal");
+
+  // Obtener el botón que abre el modal
+  var btn = document.getElementById("openModal");
+
+  // Obtener el elemento <span> que cierra el modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // Abrir el modal cuando se haga clic en el botón
+  btn.onclick = function () {
+    modal.style.display = "block";
+  };
+
+  // Cerrar el modal cuando se haga clic en <span> (x)
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Cerrar el modal cuando se haga clic en cualquier parte fuera del modal
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
+<!-- Asegúrate de incluir las bibliotecas necesarias de jQuery y Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>

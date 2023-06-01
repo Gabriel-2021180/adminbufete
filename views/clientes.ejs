@@ -1,0 +1,43 @@
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<%-include('../views/layouts/LayoutIn.ejs')%>
+<div class="content">
+    <h2 style="color: white;">Lista de Clientes</h2>
+        
+        <input id="search-inputc" class="form-control" type="text" placeholder="Buscar clientes...">
+    
+    <div style="overflow: hidden;">
+        <div class="text-right">
+    <a href="#" class="btn btn-primary">
+        <i class="fas fa-plus"></i><i class="fas fa-user"></i>
+    </a>
+</div>
+
+        <div id="cliente-table">
+        <%-include('../views/clientes-tabla.ejs')%>
+    </div>
+    </div>
+           
+       
+    
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        // Detecta cuando el valor del cuadro de búsqueda cambia
+        jQuery('#search-inputc').on('input', function() {
+            // Obtiene el valor del cuadro de búsqueda
+            var searchTermc = jQuery(this).val();
+
+            // Realiza una solicitud GET al servidor para buscar usuarios
+            jQuery.get('/clientes/buscar', { searchTermc: searchTermc }, function(data) {
+                // Actualiza la tabla de usuarios con los nuevos resultados
+                jQuery('#cliente-table').html(data);
+            });
+        });
+    });
+</script>

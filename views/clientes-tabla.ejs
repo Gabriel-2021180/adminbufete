@@ -1,0 +1,122 @@
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<section>
+   <style>
+    .table-responsive{
+        overflow: hidden;
+    }
+    @media (max-width: 767px) {
+  .table-responsive {
+    overflow: auto;
+  }
+       }
+   </style>
+
+   <div class="table-responsive ">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-uppercase">Rol</th>
+                <th class="text-uppercase">Usuario</th>
+                <th class="text-uppercase">Nombre</th>
+                <th class="text-uppercase">Carnet</th>
+                <th class="text-uppercase">Modificar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (clientes && clientes.length) { %>
+                <% clientes.forEach((clientes) => { %>
+                    <tr>
+                        <td class="text"><%= clientes.rol %></td>
+                        <td class="text"><%= clientes.username %></td>
+                        <td class="text"><%= clientes.nombres %>&nbsp; <%= clientes.apellidos %></td>
+                        <td class="text"><%= clientes.ci %></td>
+                        <td>
+                            <div class="d-flex justify-content-center justify-content-sm-start">
+                                <a href="#" class="btn btn-primary btn-sm btn-icon">
+                                    <i class="fas fa-edit"></i>
+                                </a>&nbsp;
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="confirmarBorrado('<%= clientes.id %>')">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron clientes.</td>
+                </tr>
+            <% } %>
+        </tbody>
+        <tfoot>
+            <tr>
+                
+            </tr>
+        </tfoot>
+    </table>
+</div>
+</section>
+
+<!-- Modal de confirmación -->
+
+
+<script>
+    function confirmarBorrado(userId) {
+ Swal.fire({
+   title: 'Confirmación',
+   text: '¿Estás seguro de que deseas dar de baja a este usuario?',
+   icon: 'warning',
+   showCancelButton: true,
+   confirmButtonText: 'Confirmar',
+   cancelButtonText: 'Cancelar',
+   dangerMode: true
+ }).then((result) => {
+   if (result.isConfirmed) {
+     // Realiza una solicitud PUT al servidor para cambiar el estado del usuario
+     $.ajax({
+       url: `/borrarcliente/${userId}`,
+       type: 'PUT',
+       data: { estado: false }, // Cambia el estado del usuario a false
+       success: function(response) {
+         // Si la eliminación fue exitosa, muestra un mensaje de éxito
+         Swal.fire({
+           title: 'Éxito',
+           text: response.message,
+           icon: 'success',
+           confirmButtonText: 'Aceptar',
+         }).then(() => {
+           // Actualiza la página o realiza cualquier otra acción necesaria
+           location.reload();
+         });
+       },
+       error: function(error) {
+         // Si ocurrió un error durante la eliminación, muestra un mensaje de error
+         console.log(error);
+         Swal.fire({
+           title: 'Error',
+           text: 'Ocurrió un error al eliminar el usuario',
+           icon: 'error',
+           confirmButtonText: 'Aceptar',
+         });
+       },
+     });
+   }
+ });
+}
+
+  
+</script>
+
+ <!-- Incluye la biblioteca de FontAwesome -->
+ <script src="https://kit.fontawesome.com/xxxxxxxxxx.js" crossorigin="anonymous"></script>
+ <!-- Incluye la biblioteca de jQuery -->
+ 
+ <!-- Incluye la biblioteca de SweetAlert -->
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+ <!-- Incluye la biblioteca de Bootstrap -->
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
