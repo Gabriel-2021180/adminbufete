@@ -68,7 +68,7 @@ exports.subirDocumento = async (req, res) => {
 
       await documento.save();
 
-      res.render('casos',{caso,role})
+      res.redirect(`/casos/${caso._id}`);
     });
 
     blobStream.end(archivo.buffer);
