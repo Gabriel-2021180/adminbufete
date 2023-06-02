@@ -3,26 +3,68 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<i style="font-style: normal;" id="layoutInSection">
+    <%-include('../views/layouts/LayoutIn.ejs')%>  
+</i>
+<img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="" id="layoutOnSection">
+<p style="color: white; font-family: 'Poppins',sans-serif;" id="layoutOnSection">Lista de Empleados</p>
+<style>
+    #layoutOnSection{
+        display: none;
+        width: 100px;
+  height: 100px;
+  font-size: 25px;
 
-<%-include('../views/layouts/LayoutIn.ejs')%>
+}
+    @media print {
+  #layoutInSection {
+    display: none;
+  }
+  #layoutOnSection{
+    display: block;
+    margin-left: 40px;
+  }
+  
+}
+
+</style>
 <div class="content">
-    
-    <h2 style="color: white;">Lista de Usuarios</h2>
+    <h2 style="color: white;" id="layoutInSection">Gestión de Usuarios</h2>
+    <i style="font-style: normal;" id="layoutInSection">
         <input id="search-input" class="form-control" type="text" placeholder="Buscar usuarios...">
-    
+    </i>
     <div style="overflow: hidden;">
         <div class="text-right">
-    <a href="/registro" class="btn btn-primary">
+   <!-- <a href="/registro" class="btn btn-primary" id="layoutInSection">
 
             
         <i class="fas fa-plus"></i><i class="fas fa-user"></i>
-    </a>
+    </a>-->
         <!-- Botón para abrir el modal -->
+        <i style="font-style: normal;" id="layoutInSection">
         <button id="generate-code-button"  class="btn btn-primary fas fa-key" >Crear código</button>
-        
+        </i>
+        <!-- Botón para abrir el modal -->
+        <i style="font-style: normal;" id="layoutInSection">
+            <button id="print-button"  class="btn btn-success fas fa-print" ></button>
+            </i>
+        <script>
+document.getElementById('print-button').addEventListener('click', function() {
+  // Ocultar la sección LayoutIn antes de imprimir
+  document.getElementById('layoutInSection').style.display = 'none';
+  document.getElementById('layoutOnSection').style.display = 'block';
+  // Llamar a la función de impresión
+  window.print();
+
+  // Restaurar la visibilidad de la sección LayoutIn después de imprimir
+  document.getElementById('layoutInSection').style.display = 'block';
+  document.getElementById('layoutOnSection').style.display = 'none';
+});
+
+        </script>
         <!-- Modal -->
-        <div id="invitation-code-modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.4);">
-            <div style="background-color: rgba(255, 255, 255, 0.8); margin: 15% auto; padding: 20px; border: 1px solid #6464647e; width: 30%; text-align: center;">
+        <div id="invitation-code-modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; ">
+            <div style="background-color: rgb(255, 255, 255); margin: 15% auto; padding: 20px; border: 1px solid #fdfdfd; width: 30%; text-align: center;">
               <h2 style="color: rgb(92, 92, 92); font-size: 36px;">Código de invitación</h2>
               <p id="invitation-code" style="margin: 20px 0; font-size: 64px; font-weight: bold; color: black;"></p>
               <div style="display: flex; justify-content: center; gap: 10px;">

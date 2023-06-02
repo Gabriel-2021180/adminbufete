@@ -21,14 +21,16 @@ exports.getSignup = (req, res) => {
 
 exports.postSignup = async (req, res) => {
   const { nombres, apellidos, username, ci, direccion, fechanac, phone, email, password } = req.body;
-   
-  // Realiza la validación manual de los campos
-  // ...
+  
+  // Inicializar la variable errors como un array vacío
+  const errors = [];
 
+  // Validar si hay errores en la entrada
+
+  // Verificar si hay errores y mostrar mensajes de error
   if (errors.length > 0) {
     req.flash('error_msg', 'Hay errores en la entrada.');
     return res.status(422).render('signup', { errors });
-
   }
 
   // Valida el correo electrónico
@@ -62,7 +64,6 @@ exports.postSignup = async (req, res) => {
   const usuario = "Abogado";
   const url = "https://storage.googleapis.com/primerstorage/abogadodefault.png";
 
-
   const newUser = new BufeteUser({
     nombres,
     apellidos,
@@ -76,14 +77,11 @@ exports.postSignup = async (req, res) => {
     password,
     image: url,
     emailVerificationToken,
-    
-    emailVerified: false, // Establece el campo emailVerified en falso al crear un nuevo usuario
+    emailVerified: false,
   });
 
   try {
     await newUser.save();
-
-
   } catch (error) {
     if (error.code === 11000) {
       const duplicatedField = Object.keys(error.keyValue)[0];

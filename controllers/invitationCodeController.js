@@ -22,7 +22,7 @@ exports.saveCode = async (req, res) => {
         });
 
         // Si el usuario ya ha creado 3 códigos de invitación en el último día, no permitas que cree más
-        if (count >= 3) {
+        if (count >= 10) {
             return res.status(400).json({ message: 'Has alcanzado el límite de 3 códigos de invitación por día' });
         }
 

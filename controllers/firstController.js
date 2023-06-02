@@ -42,12 +42,13 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getusers = async (req, res) => {
 const role = req.user.rol
+const user = req.user
 if (role !=="Abogado Jefe") {
   return res.status(403).send('ey!!!!!!! lo que estas haciendo esta mal sera mejor que te retires estimad@');
 }
   try {
       const usuarios = await Usuarios.find({ estado: true, _id: { $ne: req.user._id } }); // Excluye al usuario actual
-      return res.render('usuarios', { usuarios: usuarios, role, estado: true });
+      return res.render('usuarios', { usuarios: usuarios, role, estado: true,user });
   } catch (error) {
       return res.status(500).json({
           message: 'ERROR AL OBTENER LOS USUARIOS',
@@ -129,13 +130,14 @@ exports.getdatoseditarUsuario = async (req, res) => {
 
 
 exports.getclientes = async (req, res) => {
+  const user = req.user
     try {
       const role=req.user.rol;
       if (role !=="Abogado Jefe") {
         return res.status(403).send('ey!!!!!!! lo que estas haciendo esta mal sera mejor que te retires estimad@');
       }
       const clientes = await Clientes.find({ estado: true });
-        return res.render('clientes', { clientes: clientes,role,estado: true });
+        return res.render('clientes', { clientes: clientes,role,estado: true,user });
     } catch (error) {
         return res.status(500).json({
             message: 'ERROR AL OBTENER LOS clientes $error',
@@ -143,44 +145,37 @@ exports.getclientes = async (req, res) => {
     }
 };
 exports.updateUser = async (req, res) => {
-    try {
-      const { userId, nombres, apellidos, username, ci, direccion, rol, fechanac, phone, email, password, image } = req.body;
-  
-      // Encuentra el usuario por su ID
-      const usuario = await Usuarios.findById(userId);
-  
-      if (!usuario) {
-        return res.status(404).json({
-          message: 'El usuario no fue encontrado',
-        });
-      }
-  
-      // Actualiza los campos del usuario
-      usuario.nombres = nombres;
-      usuario.apellidos = apellidos;
-      usuario.username = username;
-      usuario.ci = ci;
-      usuario.direccion = direccion;
-      usuario.rol = rol;
-      usuario.fechanac = fechanac;
-      usuario.phone = phone;
-      usuario.email = email;
-      usuario.password = password;
-      usuario.image = image;
-  
-      // Guarda los cambios en la base de datos
-      await usuario.save();
-  
-      return res.status(200).json({
-        message: 'Usuario actualizado exitosamente',
-      });
-    } catch (error) {
-      return res.status(500).json({
-        message: 'Error al actualizar el usuario',
-        error: error.message,
+  try {
+    const userId = req.params.userId;
+    const { rol } = req.body;
+console.log(userId);
+    // Encuentra el usuario por su ID
+    const usuario = await Usuarios.findById(userId);
+
+    if (!usuario) {
+      return res.status(404).json({
+        message: 'El usuario no fue encontrado',
       });
     }
-  };
+
+    // Actualiza el campo 'rol' del usuario
+    usuario.rol = rol;
+
+    // Guarda los cambios en la base de datos
+    await usuario.save();
+
+    return res.status(200).json({
+      message: 'Usuario actualizado exitosamente',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error al actualizar el usuario',
+      error: error.message,
+    });
+  }
+};
+
+
 //fin de clientes
 exports.getIndex = (req, res) => {
     res.render('indexAdmin');
@@ -191,8 +186,8 @@ exports.getLogin = (req, res) => {
 }
 exports.getRegister = (req, res) => {
   const role=req.user.rol;
-  
-    res.render('RegistrarUsuario',{role})
+  const user=req.user;
+    res.render('RegistrarUsuario',{role,user})
 }
 // En tu controlador
 exports.editarUsuario = async (req, res) => {

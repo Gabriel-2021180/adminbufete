@@ -219,42 +219,72 @@
       </div>
       <a href="/" class="float" style="font-family: 'Poppins',sans-serif;"><strong>Volver</strong> </a>
 
-    <form action="/signup-with-invitation" method="POST" enctype="multipart/form-data">
+      <form action="/signup-with-invitation" method="POST" enctype="multipart/form-data" style="width: 70%;">
         <h1 style="color: #e5e5e5;">Registro</h1>
-        <label for="nombres">Nombres:</label>
-        <input type="text" id="nombres" name="nombres" required>
-
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" required>
-
-        <label for="username">Nombre de usuario:</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="ci">CI:</label>
-        <input type="text" id="ci" name="ci" required>
-
-        <label for="direccion">Dirección:</label>
-        <input type="text" id="direccion" name="direccion" required>
-
-        <label for="descripcion">Descripción:</label>
-        <input type="text" id="descripcion" name="descripcion" required>
-
-        <label for="fechanac">Fecha de nacimiento:</label>
-        <input type="date" id="fechanac" name="fechanac" required>
-
-        <label for="phone">Teléfono:</label>
-        <input type="text" id="phone" name="phone" required>
-
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-
-        <label for="image">Imagen de perfil:</label>
-        <input type="file" id="image"  accept=".jpg,.jpeg,.png" name="profileimg">
-
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <label for="nombres">Nombres:</label>
+                    <input type="text" id="nombres" name="nombres" required style="width: 100%;">
+                </td>
+                <td>
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" name="apellidos" required style="width: 100%;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="username">Nombre de usuario:</label>
+                    <input type="text" id="username" name="username" required style="width: 100%;">
+                </td>
+                <td>
+                  <label for="direccion">Dirección:</label>
+                  <input type="text" id="direccion" name="direccion" required style="width: 100%;">
+              </td>
+               
+            </tr>
+            <tr>
+              <td>
+                <label for="ci">CI:</label>
+                <input type="text" id="ci" name="ci" required style="width: 100%;">
+            </td>
+                <td>
+                    <label for="descripcion">Descripción (Los clientes podrán verla en tu perfil):</label>
+                    <input type="text" id="descripcion" name="descripcion" required style="width: 100%;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fechanac">Fecha de nacimiento:</label>
+                    <input type="date" id="fechanac" name="fechanac" required style="width: 100%;">
+                </td>
+                <td>
+                  <label for="email">Correo electrónico:</label>
+                  <input type="email" id="email" name="email" required style="width: 100%;">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="phone">Teléfono:</label>
+                <input type="text" id="phone" name="phone" required style="width: 100%;">
+            </td>
+                
+                <td>
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required style="width: 100%;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label for="image">Imagen de perfil:</label>
+                    <input type="file" id="image" accept=".jpg, .jpeg, .png" name="profileimg" style="width: 100%;">
+                </td>
+            </tr>
+        </table>
         <button type="submit">Registrarse</button>
     </form>
+    
+    
+    
 </body>
 </html>

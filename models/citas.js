@@ -6,7 +6,7 @@ const citaSchema = new Schema({
     estado: {type:String,required:true},
     fecha: {type:Date,required:true},
     hora: {type:String,required:true},
-    horafin: {type:String,required:true},
+    horaFin: {type:String,required:true},
     abogado: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'BufeteUser',

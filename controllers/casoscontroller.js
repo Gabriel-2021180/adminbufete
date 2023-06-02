@@ -44,7 +44,7 @@ exports.postCrearCaso = async (req, res) => {
     try {
       const role=req.user.rol
       const casoId = req.params.id;
-  
+      const user=req.user
       const caso = await Caso.findById(casoId).populate('abogado cliente');
   
       // Verifica si el usuario autenticado es el mismo que el usuario asociado con el caso
@@ -53,7 +53,7 @@ exports.postCrearCaso = async (req, res) => {
       }
   
       const documentos = await Documento.find({ caso: casoId,estado:true });
-      res.render('caso', { caso, documentos,role });
+      res.render('caso', { caso, documentos,role,user });
     } catch (error) {
       console.error('Error al obtener el caso:', error);
       res.status(500).json({ error: 'Ocurrió un error al obtener el caso' });
@@ -63,6 +63,7 @@ exports.postCrearCaso = async (req, res) => {
   
   exports.getCasosAbogado = async (req, res) => {
     try {
+      const user=req.user
       const role=req.user.rol
       const abogadoId = req.user._id; // Obtén el ID del abogado autenticado
   
@@ -70,7 +71,7 @@ exports.postCrearCaso = async (req, res) => {
       const casos = await Caso.find({ abogado: abogadoId,estado:true }).populate('abogado cliente');
   
       // Renderiza la vista de casos del abogado
-      res.render('casos', { casos,role });
+      res.render('casos', { casos,role,user });
     } catch (error) {
       console.error('Error al obtener los casos del abogado:', error);
       res.status(500).json({ error: 'Ocurrió un error al obtener los casos del abogado' });
@@ -129,6 +130,7 @@ exports.postCrearPago = async (req, res) => {
 
 exports.getPagosCaso = async (req, res) => {
   try {
+    const user = req.user
     const casoId = req.params.id;
 
     const caso = await Caso.findById(casoId);
@@ -140,7 +142,7 @@ exports.getPagosCaso = async (req, res) => {
 
     const pagos = await Pago.find({ caso: casoId }).populate('cliente abogado');
 
-    res.render('pagos', { pagos });
+    res.render('pagos', { pagos,user });
   } catch (error) {
     console.error('Error al obtener los pagos:', error);
     res.status(500).json({ error: 'Ocurrió un error al obtener los pagos' });

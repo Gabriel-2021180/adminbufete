@@ -20,11 +20,11 @@
     <table class="table">
         <thead class="thead-dark">
             <tr>
-                <th class="text-uppercase">Rol</th>
+                <th class="text-uppercase">Cargo</th>
                 <th class="text-uppercase">Usuario</th>
                 <th class="text-uppercase">Nombre</th>
                 <th class="text-uppercase">Carnet</th>
-                <th class="text-uppercase">Modificar</th>
+                <th class="text-uppercase" id="layoutInSection">Modificar</th>
             </tr>
         </thead>
         <tbody>
@@ -38,11 +38,11 @@
                         <td class="text" style="display: none;"><%= usuario.id %></td>
                         <td>
                           <div class="d-flex justify-content-center justify-content-sm-start">
-                            <button type="button" class="btn btn-primary btn-sm btn-icon btn-editar-usuario" data-toggle="modal" data-target="#registrationModal" data-id="<%= usuario.id %>">
+                            <button type="button" id="layoutInSection" class="btn btn-primary btn-sm btn-icon btn-editar-usuario" data-toggle="modal" data-target="#registrationModal" data-id="<%= usuario.id %>">
                               <i class="fas fa-edit"></i>
                             </button>
                             </button>&nbsp;
-                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="confirmarBorrado('<%= usuario.id %>')">
+                            <button type="button" id="layoutInSection" class="btn btn-danger btn-sm btn-icon" onclick="confirmarBorrado('<%= usuario.id %>')">
                               <i class="fas fa-trash-alt"></i>
                             </button>
                             </div>
@@ -67,66 +67,42 @@
 <!-- Modal -->
 <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-          <center><h5 class="modal-title-centered text-white" id="registrationModalLabel">Editar Usuario</h5></center>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="">
-          <form style="padding-left: 50px;">
-            <center>
+    <div class="modal-content" >
+      <div class="modal-header" style="background-color: white; color: black;">
+        <center>
+          <h5 class="modal-title-centered text" id="registrationModalLabel" style="color: black;">Editar Usuario</h5>
+        </center>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="">
+        <form style="padding-left: 50px;">
+          <center>
             <div class="form-row">
-              <div class="form-group col-md-5">
-                <label for="nombres">Nombres:</label>
-                <input type="text" maxlength="50" class="form-control" id="nombres" placeholder="Ingrese el o los nombres" required>
-              </div>
-              <div class="form-group col-md-5">
-                <label for="apellidos">Apellidos:</label>
-                <input type="text" maxlength="50" class="form-control" id="apellidos" placeholder="Ingrese el o los apellidos" required>
-              </div>
-              <div class="form-group col-md-5">
-                <label for="username">Username:</label>
-                <input type="text" maxlength="32" class="form-control" id="username" placeholder="Ingrese el nombre de usuario" required>
-              </div>
-              <div class="form-group col-md-5">
-                <label for="ci">CI:</label>
-                <input type="text" maxlength="10" class="form-control" id="ci" placeholder="Ingrese el Nº de documento" required>
-              </div>
-              <div class="form-group col-md-5">
-                <label for="direccion">Dirección:</label>
-                <input type="text" maxlength="50" class="form-control" id="direccion" placeholder="Ingrese la dirección del usuario" required>
-              </div>
+              
               <input type="hidden" id="userId" name="userId">
+
               <div class="form-group col-md-5">
                 <label for="rol">Rol:</label>
-                <select class="form-control" id="rol" required>
+                <select class="form-control" id="rol" required style="width: 300px; height: 35px;" >
                   <option value="" style="color: black;">Seleccione un rol</option>
                   <option value="Abogado" style="color: black;">Abogado</option>
                   <option value="Secretaria" style="color: black;">Secretaria</option>
                 </select>
               </div>
-              <div class="form-group col-md-5">
-                <label for="fechanac">Fecha de Nacimiento:</label>
-                <input type="date" class="form-control" id="fechaNacimiento" required>
-              </div>
-              <div class="form-group col-md-5">
-                <label for="phone">Teléfono:</label>
-                <input type="text" class="form-control" maxlength="10" id="phone" placeholder="Ingrese el número de teléfono del usuario" required>
-              </div>
               
-            </div>
           </center>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        </div>
+        </form>
+      </div>
+      <div class="modal-footer" style="background-color: white;">
+        <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
+</div>
+
   
 <script>
      function confirmarBorrado(userId) {
@@ -136,7 +112,9 @@
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Confirmar',
+    confirmButtonColor: 'Blue',
     cancelButtonText: 'Cancelar',
+    cancelButtonColor: 'Red',
     dangerMode: true
   }).then((result) => {
     if (result.isConfirmed) {
@@ -152,6 +130,7 @@
             text: response.message,
             icon: 'success',
             confirmButtonText: 'Aceptar',
+            confirmButtonColor: 'Blue'
           }).then(() => {
             // Actualiza la página o realiza cualquier otra acción necesaria
             location.reload();
@@ -162,9 +141,10 @@
           console.log(error);
           Swal.fire({
             title: 'Error',
-            text: 'Ocurrió un error al eliminar el usuario',
+            text: 'Ocurrió un error al dar de baja el usuario',
             icon: 'error',
             confirmButtonText: 'Aceptar',
+            confirmButtonText: 'Blue'
           });
         },
       });
@@ -176,93 +156,81 @@
 </script>
 
 <script>
- $(document).ready(function() {
-  // Escucha el evento click en el botón de edición
-  $(document).on('click', '.btn-editar-usuario', function(event) {
-    const button = $(event.currentTarget); // Botón que activó el modal
-    const userId = button.data('id'); // ID del usuario
-
-    // Hace una solicitud GET al servidor para obtener los datos del usuario
-    $.get(`/usuarios/${userId}`, function(data) {
-      console.log("Estos son los datos que llegaron:", data);
-      // Rellena los campos del formulario en el modal con los datos recibidos
-      $('#nombres').val(data.nombres);
-      $('#apellidos').val(data.apellidos);
-      $('#username').val(data.username);
-      $('#ci').val(data.ci);
-      $('#direccion').val(data.direccion);
-      $('#rol').val(data.rol);
-      $('#fechaNacimiento').val(data.fechanac);
-      $('#phone').val(data.phone);
-      $('#userId').val(userId); // Asegúrate de que estás asignando el ID del usuario al input correcto
+  $(document).ready(function() {
+    // Escucha el evento click en el botón de edición
+    $(document).on('click', '.btn-editar-usuario', function(event) {
+      const button = $(event.currentTarget); // Botón que activó el modal
+      const userId = button.data('id'); // ID del usuario
+  
+      // Hace una solicitud GET al servidor para obtener los datos del usuario
+      $.get(`/usuarios/${userId}`, function(data) {
+        console.log("Estos son los datos que llegaron:", data);
+        // Rellena los campos del formulario en el modal con los datos recibidos
+        $('#nombres').val(data.nombres);
+        $('#apellidos').val(data.apellidos);
+        $('#username').val(data.username);
+        $('#ci').val(data.ci);
+        $('#direccion').val(data.direccion);
+        $('#rol').val(data.rol);
+        $('#fechaNacimiento').val(data.fechanac);
+        $('#phone').val(data.phone);
+        $('#userId').val(userId); // Asegúrate de que estás asignando el ID del usuario al input correcto
+      });
     });
   });
-});
-
-// Obtén la referencia al elemento <select>
+  
+  // Obtén la referencia al elemento <select>
   var selectRol = document.getElementById('rol');
-
-// Establece la opción seleccionada según el valor de la variable 'rol'
-selectRol.value = rol;
-function guardarUsuario() {
+  
+  // Establece la opción seleccionada según el valor de la variable 'rol'
+  selectRol.value = rol;
+  
+  function guardarUsuario() {
   const userId = $('#userId').val();
-  const nombres = $('#nombres').val();
-  const apellidos = $('#apellidos').val();
-  const username = $('#username').val();
-  const ci = $('#ci').val();
-  const direccion = $('#direccion').val();
   const rol = $('#rol').val();
-  const fechanac = $('#fechaNacimiento').val();
-  const phone = $('#phone').val();
-  const email = $('#email').val();
-  const password = $('#password').val();
 
-  // Objeto con los datos actualizados del usuario
+  // Objeto con el campo 'rol' actualizado
   var data = {
-    nombres: nombres,
-    apellidos: apellidos,
-    username: username,
-    ci: ci,
-    direccion: direccion,
     rol: rol,
-    fechanac: fechanac,
-    phone: phone,
-    email: email,
-    password: password,
   };
 
-  // Realiza una solicitud PUT al servidor para actualizar el usuario
-  $.ajax({
-    url: `/editusuarios/${userId}`,
-    type: 'PUT',
-    data: data,
-    success: function(response) {
+  // Realiza una solicitud POST al servidor para actualizar el usuario
+  console.log('/editusuarios/${userId}');
+  fetch('/editusuarios/${userId}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((result) => {
       // Si la actualización fue exitosa, muestra un mensaje y cierra el modal
       Swal.fire({
         title: 'Éxito',
-        text: response.message,
+        text: result.message,
         icon: 'success',
         confirmButtonText: 'Aceptar',
       }).then(() => {
         $('#registrationModal').modal('hide');
+        location.reload(); // Actualiza la página después de cerrar el modal
       });
-    },
-    error: function(error) {
-      
-      console.log(error)
+    })
+    .catch((error) => {
       Swal.fire({
         title: 'Error',
         text: 'Ocurrió un error al actualizar el usuario',
         icon: 'error',
         confirmButtonText: 'Aceptar',
       });
-      
-    },
-  });
+    });
 }
 
 
-</script>
+  </script>
+  
+  
+
 
  <!-- Incluye la biblioteca de FontAwesome -->
  <script src="https://kit.fontawesome.com/xxxxxxxxxx.js" crossorigin="anonymous"></script>

@@ -27,12 +27,12 @@
   }
 
   .modal-content {
-    background-color: #fefefe;
-    margin: -50% auto; /* Ajustar el margen superior para posicionar más arriba */
+    
+    margin: -30% auto; /* Ajustar el margen superior para posicionar más arriba */
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
+    
+    width: 110%;
+    
   }
       
         .close {
@@ -71,55 +71,74 @@
 
 <!-- Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" style="background-color: rgba(34, 34, 34, 0.836);">
-      <div class="modal-header" style="background-color: rgba(34, 34, 34, 0.836);">
-        <h5 class="modal-title" id="editModalLabel" style="background-color: rgba(34, 34, 34, 0.836); color: white;">Editar Perfil</h5>
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content" style="background-color: rgb(255, 255, 255); border-radius: 1%;">
+      <div class="modal-header" style="background-color: rgb(255, 255, 255);">
+        <h5 class="modal-title" id="editModalLabel" style="background-color: rgb(255, 255, 255); color: black;">Editar Perfil</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="background-color: rgba(255, 255, 255, 0.062);">
-        <form id="editForm" action="/profile/edit" method="post" enctype="multipart/form-data" style="color: white; align-content: center;">
-          <div>
-            <label for="editfechanac">Fecha de Nacimiento:</label>
-            <input type="date" id="fechanac" name="editfechanac" value="<%= user.fechanac.toISOString().split('T')[0] %>" style="color: black;">
-          </div>
-          <div>
-            <label for="editnombres">Nombre:</label>
-            <input type="text" id="nombres" name="editnombres" value="<%= user.nombres %>">
-          </div>
-          <div>
-            <label for="editapellidos">Apellidos:</label>
-            <input type="text" id="apellidos" name="editapellidos" value="<%= user.apellidos %>">
-          </div>
-          <div>
-            <label for="editusername">Username:</label>
-            <input type="text" id="username" name="editusername" value="<%= user.username %>">
-          </div>
-          <div>
-            <label for="editphone">Teléfono:</label>
-            <input type="text" id="editphone" name="editphone" value="<%= user.phone %>">
-          </div>
-          <div>
-            <label for="editdireccion">Dirección:</label>
-            <input type="text" id="direccion" name="editdireccion" value="<%= user.direccion %>">
-          </div>
-          <div>
-            <label for="editci">CI:</label>
-            <input type="text" id="ci" name="editci" value="<%= user.ci %>">
-          </div>
-          <!-- Agrega aquí el resto de los campos -->
-          <div class="image-upload-container">
-            <label for="editimage" class="image-upload-label">Nueva imagen de perfil:</label>
-            <input type="file" id="editimage" name="editimage" accept=".jpg,.jpeg,.png" class="image-upload-input" value="<%= user.image %>">
-          </div>
+      <div class="modal-body" style="background-color: rgb(255, 255, 255);">
+        <form id="editForm" action="/profile/edit" method="post" enctype="multipart/form-data" style="color: rgb(0, 0, 0); align-content: center;">
+          <table>
+            
+            <tr>
+              <td>
+                <label for="editnombres">Nombre:</label>
+                <input type="text" id="nombres" name="editnombres" value="<%= user.nombres %>">
+              </td>
+              <td>
+                <label for="editapellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="editapellidos" value="<%= user.apellidos %>">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="editfechanac">Fecha de Nacimiento:</label>
+                <input type="date" id="fechanac" name="editfechanac" value="<%= user.fechanac.toISOString().split('T')[0] %>" style="color: black;">
+              </td>
+              <td>
+                <label for="editusername">Username:</label>
+                <input type="text" id="username" name="editusername" value="<%= user.username %>">
+              </td>
+            </tr>
+           
+            <tr>
+              <td>
+                <label for="editphone">Teléfono:</label>
+                <input type="text" id="editphone" name="editphone" value="<%= user.phone %>">
+              </td>
+              <td>
+                <label for="editdireccion">Dirección:</label>
+                <input type="text" id="direccion" name="editdireccion" value="<%= user.direccion %>">
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <label for="editci">CI:</label>
+                <input type="text" id="ci" name="editci" value="<%= user.ci %>">
+              </td>
+              <td colspan="2">
+                <div class="image-upload-container">
+                  <label for="editimage" class="image-upload-label">Nueva imagen de perfil:</label>
+                  <input type="file" id="editimage" name="editimage" accept=".jpg,.jpeg,.png" class="image-upload-input" value="<%= user.image %>">
+                </div>
+              </td>
+            </tr>
+            <!-- Agrega aquí el resto de los campos -->
+           
+          </table>
           <button class="btn btn-primary" type="submit">Guardar</button>
         </form>
+        
+        
       </div>
     </div>
   </div>
 </div>
+
 
       
      

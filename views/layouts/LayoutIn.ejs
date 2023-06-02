@@ -99,7 +99,7 @@
                   <span class="navbar-toggler-bar bar3"></span>
                 </button>
               </div>
-              <a class="navbar-brand" href="javascript:void(0)">Shark</a>
+              <a class="navbar-brand" href="javascript:void(0)">Sistema Administrativo Shark</a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -113,7 +113,7 @@
                 <li class="dropdown nav-item">
                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                     <div class="photo">
-                      <img src="https://storage.googleapis.com/primerstorage/20230423_212006_MicrosoftTeams-image (6).png" alt="Profile Photo">
+                      <img src="<%= user.image %>" alt="Profile Photo">
                     </div>
                     <b class="caret d-none d-lg-block d-xl-block"></b>
                     <p class="d-lg-none">
@@ -121,10 +121,9 @@
                     </p>
                   </a>
                   <ul class="dropdown-menu dropdown-navbar">
-                    <li class="nav-link"><a href="/profile" class="nav-item dropdown-item">Profile</a></li>
-                    <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Settings</a></li>
-                    <li class="dropdown-divider"></li>
-                    <li class="nav-link"><a href="/logout" class="nav-item dropdown-item">Log out</a></li>
+                    <li class="nav-link"><a href="/profile" class="nav-item dropdown-item">Perfil</a></li>
+                    
+                    <li class="nav-link"><a href="/logout" class="nav-item dropdown-item">Cerrar Sesión</a></li>
                   </ul>
                 </li>
                 <li class="separator d-lg-none"></li>

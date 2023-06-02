@@ -3,10 +3,11 @@ const Caso = require('../models/casos');
 exports.getSolicitudes = async (req, res) => {
   try {
     const role= req.user.rol
+    const user = req.user
     const abogadoId = req.user._id; // Obtén el ID del abogado logueado
     const solicitudes = await SolicitudAbogado.find({ abogado: abogadoId }).populate('cliente');
 
-    res.render('solicitudes', { solicitudes, abogadoId,role }); // Pasa abogadoId como una variable en los datos de la vista
+    res.render('solicitudes', { solicitudes, abogadoId,role,user }); // Pasa abogadoId como una variable en los datos de la vista
   } catch (error) {
     console.error('Error al obtener las solicitudes:', error);
     res.status(500).json({ error: 'Ocurrió un error al obtener las solicitudes' });

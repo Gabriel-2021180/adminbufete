@@ -17,7 +17,7 @@
       selectMirror: true,
       dayMaxEvents: true,
       weekends: true,
-      editable: true,
+      editable: false,
       select: openSelectModal,
       eventClick: openEventModal,
       events: function (info, successCallback, failureCallback) {
@@ -44,14 +44,15 @@
               let fecha;
               let fechaInicio;
               let fechaFin;
-
+            
               // Tratar tanto citas como reuniones de la misma manera
               fechaYHora = evento.fecha.split(', ');
               fecha = fechaYHora[0];
+
               fechaInicio = new Date(fecha + 'T' + evento.hora);
               fechaFin = new Date(fecha + 'T' + evento.horaFin);
-
-              return {
+            console.log(fechaFin)
+              let event = {
                 title: evento.motivo || evento.asunto,
                 start: fechaInicio,
                 end: fechaFin,
@@ -63,7 +64,15 @@
                 },
                 color: evento.tipo === 'cita' ? 'blue' : 'red', // Azul para citas, rojo para reuniones
               };
-            });
+            
+              // Si es una reunión, agregar las propiedades 'lugar' e 'invitados'
+              if (evento.tipo === 'reunion') {
+                event.extendedProps.lugar = evento.lugar;
+                 // Asume que 'invitados' es un array de nombres
+              }
+            
+              return event;
+            });            
 
             console.log('EventosDespués de mapear:', events); // Agrega esto
             console.log('Eventos en el calendario:', calendar.getEvents());
@@ -289,48 +298,59 @@
 
   function openEventModal(info) {
     console.log('Abriendo modal de información para el evento:', info.event);
-    if (info.event.color === 'blue') {
-      // Abrir el modal de detalles de la cita
-      var eventModal = document.getElementById('eventModal');
-      var eventClose = document.getElementById('eventClose');
-      var eventMotivo = document.getElementById('eventMotivo');
-      var eventFecha = document.getElementById('eventFecha');
-      var eventHora = document.getElementById('eventHora');
-      var eventEstado = document.getElementById('eventEstado');
-      var eventHoraFin = document.getElementById('eventHoraFin');
-      eventMotivo.textContent = 'Motivo: ' + info.event.title;
-      eventFecha.textContent = 'Fecha: ' + info.event.start.toLocaleDateString();
-      eventHora.textContent = 'Hora Inicio: ' + info.event.start.toLocaleTimeString();
-      eventEstado.textContent = 'Estado: ' + info.event.extendedProps.estado;
-      eventHoraFin.textContent = 'Hora Fin: ' + info.event.extendedProps.horaFin;
-      eventModal.style.display = 'block';
+    var eventModal = document.getElementById('eventModal');
+    var eventClose = document.getElementById('eventClose');
+    var eventMotivo = document.getElementById('eventMotivo');
+    var eventFecha = document.getElementById('eventFecha');
+    var eventHora = document.getElementById('eventHora');
+    var eventEstado = document.getElementById('eventEstado');
+    var eventHoraFin = document.getElementById('eventHoraFin');
+    var deleteEventBtn = document.getElementById('deleteEventBtn');
+    // Campos adicionales para las reuniones
+    var eventLugar = document.getElementById('eventLugar');
+    var eventInvitados = document.getElementById('eventInvitados');
 
-      eventClose.onclick = function () {
-        eventModal.style.display = 'none';
-      };
-    } else if (info.event.color === 'red') {
-      // Abrir el modal de detalles de la reunión
-      var reunionDetailsModal = document.getElementById('reunionDetailsModal');
-      var reunionDetailsClose = document.getElementById('reunionDetailsClose');
-      var reunionAsunto = document.getElementById('reunionAsunto');
-      var reunionLugar = document.getElementById('reunionLugar');
-      var reunionFecha = document.getElementById('reunionFecha');
-      var reunionHoraInicio = document.getElementById('reunionHoraInicio');
-      var reunionHoraFin = document.getElementById('reunionHoraFin');
-      var reunionEstado = document.getElementById('reunionEstado');
-      reunionAsunto.textContent = 'Asunto: ' + info.event.title;
-      reunionLugar.textContent = 'Lugar: ' + info.event.extendedProps.lugar; // Ajusta la propiedad según corresponda
-      reunionFecha.textContent = 'Fecha: ' + info.event.start.toLocaleDateString();
-      reunionHoraInicio.textContent = 'Hora Inicio: ' + info.event.start.toLocaleTimeString();
-      reunionEstado.textContent = 'Estado: ' + info.event.extendedProps.estado;
-      reunionHoraFin.textContent = 'Hora Fin: ' + info.event.extendedProps.horaFin;
-      reunionDetailsModal.style.display = 'block';
+    eventMotivo.textContent = 'Motivo: ' + info.event.title;
+    eventFecha.textContent = 'Fecha: ' + info.event.start.toLocaleDateString();
+    eventHora.textContent = 'Hora Inicio: ' + info.event.start.toLocaleTimeString();
+    eventEstado.textContent = 'Estado: ' + info.event.extendedProps.estado;
+    eventHoraFin.textContent = 'Hora Fin: ' + info.event.extendedProps.horaFin;
 
-      reunionDetailsClose.onclick = function () {
-        reunionDetailsModal.style.display = 'none';
-      };
+    var eventColor = info.event.color || info.event.backgroundColor || info.event.borderColor;
+
+    if (eventColor === 'blue') {
+        // Es una cita, ocultar los campos de la reunión
+        console.log('estamos en citas')
+        eventLugar.style.display = 'none';
+        eventInvitados.style.display = 'none';
+    } else if (eventColor === 'red') {
+        // Es una reunión, mostrar los campos de la reunión y llenarlos con la información correspondiente
+        console.log('estamos en reuniones')
+        eventLugar.style.display = 'block';
+        eventInvitados.style.display = 'block';
+        eventLugar.textContent = 'Lugar: ' + info.event.extendedProps.lugar; // Asume que el evento tiene una propiedad 'lugar'
+        eventInvitados.textContent = 'Invitados: ' + info.event.extendedProps.invitados; // Asume que el evento tiene una propiedad 'invitados'
     }
-  }
+
+    eventModal.style.display = 'block';
+    deleteEventBtn.onclick = function () {
+      var tipo = info.event.color === 'blue' ? 'cita' : 'reunion'; // Azul para citas, rojo para reuniones
+      deleteEvent(info.event.id, tipo);
+    };
+    
+
+    eventClose.onclick = function () {
+        eventModal.style.display = 'none';
+    };
+}
+
+//fin del evento
+  /*
+  cerrar el modal
+  eventClose.onclick = function () {
+      eventModal.style.display = 'none';
+    };
+  */ 
 
   function saveEvent(event, endTime) {
     var fechaSinZonaHoraria = document.getElementById('date').value;
@@ -380,7 +400,7 @@
           estado: 'pendiente',
           fecha: fechaSinZonaHoraria,
           hora: selectedTime,
-          horafin: endTime,
+          horaFin: endTime,
           cliente: clienteId, 
         };
 
@@ -395,6 +415,7 @@
         })
           .then((response) => {
             if (!response.ok) {
+              console.error('Estado de la respuesta:', response.status);
               throw new Error('Error al guardar la cita');
             }
             return response.json();
@@ -411,18 +432,18 @@
       });
   }
 
- function saveReunion(event, endTime) {
+  function saveReunion(event) {
     var reunionTimeFin = document.getElementById('reunionTimeFin').value;
     var fechaSinZonaHoraria = document.getElementById('reunionDate').value;
     var reunionTimeInicio = document.getElementById('reunionTimeInicio').value;
     var asuntoReunion = document.getElementById('asuntoReunion').value;
     var lugarReunion = document.getElementById('lugarReunion').value;
-
+  
     if (asuntoReunion.trim() === '') {
       alert('Debes ingresar un asunto para la reunión.');
       return;
     }
-
+  
     // Verificar si la hora seleccionada y el intervalo de tiempo son válidos
     if (!isValidDateTime(event.start, event.end, reunionTimeInicio)) {
       Swal.fire({
@@ -433,64 +454,56 @@
       });
       return;
     }
-
-    // Verificar si la hora seleccionada está disponible
-    console.log('Preparando para cargar las reuniones... en save reunion');
-    fetch('/reunionesJSON')
+  
+    const reunion = {
+      asunto: asuntoReunion,
+      estado: 'pendiente',
+      fecha: fechaSinZonaHoraria,
+      hora: reunionTimeInicio,
+      horaFin: reunionTimeFin,
+      lugar: lugarReunion,
+      usuarios: usuariosInvitados.map(usuario => usuario._id), // Enviar solo los IDs de los usuarios
+    };
+  
+    console.log('Preparando para guardar la reunión...');
+    console.log(reunion);
+    fetch('/reuniones', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reunion),
+    })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Error al cargar las reuniones');
+          console.error('Estado de la respuesta:', response.status);
+          throw new Error('Error al guardar la reunión');
         }
         return response.json();
       })
-      .then((reuniones) => {
-        let isTimeAvailable = reuniones.every((reunion) => {
-          let reunionFecha = new Date(reunion.fecha);
-          let reunionHoraInicio = reunion.hora.split(':').slice(0, 2).join(':'); // Extraer solo la hora y minutos
-          let reunionHoraFin = reunion.horaFin.split(':').slice(0, 2).join(':'); // Extraer solo la hora y minutos
-          let selectedTimeFin = endTime.split(':').slice(0, 2).join(':'); // Extraer solo la hora y minutos
-          let selectedDate = new Date(fechaSinZonaHoraria);
-
-          // Comparamos si la fecha y el intervalo de tiempo seleccionado se superponen con el de la reunión
-          return !(selectedDate.getTime() === reunionFecha.getTime() && reunionTimeInicio >= reunionHoraInicio && selectedTimeFin <= reunionHoraFin);
+      .then((savedEvent) => {
+        console.log('Reunión guardada exitosamente');
+        Swal.fire({
+          title: 'Éxito',
+          text: 'La reunión ha sido guardada exitosamente.',
+          icon: 'success',
+          confirmButtonText: 'OK',
         });
-
-        const reunion = {
-          asunto: asuntoReunion,
-          estado: 'pendiente',
-          fecha: fechaSinZonaHoraria,
-          hora: reunionTimeInicio,
-          horaFin: endTime,
-          lugar: lugarReunion,
-          usuarios: usuariosInvitados.map(usuario => usuario._id), // Enviar solo los IDs de los usuarios
-        };
-
-        console.log('Preparando para guardar la reunión...');
-        console.log( reunion);
-        fetch('/reuniones', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(reunion),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Error al guardar la reunión');
-            }
-            return response.json();
-          })
-          .then((savedEvent) => {
-            console.log('Reunión guardada:', savedEvent);
-          })
-          .catch((error) => {
-            console.error('Error al guardar la reunión:', error);
-          });
+        $('#reunionModal').modal('hide');
+        calendar.refetchEvents();
       })
       .catch((error) => {
-        console.error('Error al cargar las reuniones:', error);
+        console.error('Error:', error);
+        Swal.fire({
+          title: 'Éxito',
+          text: 'La reunión ha sido guardada exitosamente.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
       });
   }
+  
+
 
   function isValidDateTime(start, end, selectedTime) {
     var events = calendar.getEvents(); // Obtener todos los eventos del calendario
@@ -515,9 +528,17 @@
 
   function generateReunionTimes(selectedTime, timeFinReunion) {
     var options = '';
-    var start = new Date('1970-01-01T' + selectedTime + 'Z');
-    var end = new Date('1970-01-01T18:00Z'); // Hora de fin fija a las 6:00 PM
-
+    var start = new Date('1970-01-01T' + selectedTime); // Quita la 'Z'
+    var end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // Agrega 2 horas a la hora de inicio
+  
+    // Si la hora de fin supera las 6:00 PM, ajustarla a las 6:00 PM
+    if (end > new Date('1970-01-01T18:00')) { // Quita la 'Z'
+      end = new Date('1970-01-01T18:00'); // Quita la 'Z'
+    }
+  
+    // Agrega 10 minutos a la hora de inicio para la primera opción de hora de finalización
+    start.setTime(start.getTime() + 10 * 60000);
+  
     while (start < end) {
       var time = start.toLocaleTimeString('en-US', {
         hour: '2-digit',
@@ -525,8 +546,35 @@
         hour12: false,
       });
       options += '<option value="' + time + '">' + time + '</option>';
-      start.setTime(start.getTime() + 30 * 60000); // Agrega 30 minutos
+      start.setTime(start.getTime() + 10 * 60000); // Agrega 10 minutos
     }
-
+  
     timeFinReunion.innerHTML = options;
   }
+  
+  function deleteEvent(eventId, tipo) {
+    var ruta = tipo === 'cita' ? '/citas/' : '/reuniones/';
+    fetch(ruta + eventId + '/eliminar', { // Ahora es una solicitud POST
+      method: 'POST',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error al eliminar el evento');
+        }
+        return response.json();
+      })
+      .then((deletedEvent) => {
+        console.log('Evento eliminado exitosamente:', deletedEvent);
+        // Actualizar el calendario para reflejar el cambio
+        calendar.refetchEvents();
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el evento:', error);
+      });
+  }
+  
+  
+  
+  
+  
+  

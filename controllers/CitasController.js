@@ -5,9 +5,9 @@ const User = require('../models/clientes');
 const mongoose = require('mongoose');
 exports.postCita = async (req, res) => {
   try {
-    const { motivo, estado, fecha, hora, horafin, cliente } = req.body;
+    const { motivo, estado, fecha, hora, horaFin, cliente } = req.body;
     const abogadoId = req.user._id; // Asume que el ID del abogado está en req.user._id
-    const cita = new Cita({ motivo, estado, fecha, hora, horafin, abogado: abogadoId,cliente });
+    const cita = new Cita({ motivo, estado, fecha, hora, horaFin, abogado: abogadoId,cliente });
 
     console.log('Recibida solicitud para guardar cita:', cita);
     await cita.save();
@@ -89,4 +89,36 @@ exports.getClientesDelAbogado = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los clientes del abogado' });
   }
 };
+//"eliminar las citas y reuniones"
+// Controlador de citas
+exports.postEliminarCita = async (req, res) => {
+  try {
+    const citaId = req.params.id;
+    const cita = await Cita.findById(citaId);
+    if (!cita) {
+      throw new Error('Cita no encontrada');
+    }
+    cita.estado = false; // Cambia el estado a false
+    await cita.save();
+    res.json({ message: 'Cita eliminada exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar la cita:', error);
+    res.status(500).json({ message: 'Error al eliminar la cita' });
+  }
+};
 
+exports.postEliminarReunion = async (req, res) => {
+  try {
+    const reunionId = req.params.id;
+    const reunion = await Reunion.findById(reunionId);
+    if (!reunion) {
+      throw new Error('Reunión no encontrada');
+    }
+    reunion.estado = false; // Cambia el estado a false
+    await reunion.save();
+    res.json({ message: 'Reunión eliminada exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar la reunión:', error);
+    res.status(500).json({ message: 'Error al eliminar la reunión' });
+  }
+};

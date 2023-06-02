@@ -98,8 +98,8 @@ router.post(
 
 router.get('/index', ensureAuthenticated, (req, res) => {
   const role= req.user.rol
-  console.log(role)
-  res.render('indexAdmin', { user: req.user,role });
+  const user=req.user
+  res.render('indexAdmin', { user: req.user,role,user});
 });
 
 router.get('/logout', LoginController.getLogout);
@@ -150,10 +150,14 @@ router.get('/usuarios/buscar',ensureAuthenticated,firstcontroller.getAllUsers)
 router.post('/citas',ensureAuthenticated,CitasController.postCita)
 router.get('/citasJSON',ensureAuthenticated,CitasController.getCitasJSON)
 router.get('/reunionesJSON',ensureAuthenticated,CitasController.getReunionesJSON)
+// ruta.js
+router.post('/citas/:id/eliminar', CitasController.postEliminarCita);
+router.post('/reuniones/:id/eliminar', CitasController.postEliminarReunion);
+
 // ver usuarios
 router.get('/usuarios', ensureAuthenticated,firstcontroller.getusers);
 
-router.put('/editusuarios/:id', ensureAuthenticated,firstcontroller.updateUser);
+router.post('/editusuarios/:id', ensureAuthenticated,firstcontroller.updateUser);
 //parte de la invitacion
 router.post('/invitationCodes', ensureAuthenticated, InvitationCodeController.saveCode);
 router.get('/enter-invitation-code', InvitationCodeController.getEnterInvitationCode);
