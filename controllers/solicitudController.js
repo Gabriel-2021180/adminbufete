@@ -18,7 +18,7 @@ exports.getSolicitudes = async (req, res) => {
 
 
 
-// Controlador
+
 exports.postAceptarSolicitud = async (req, res) => {
   try {
     const solicitudId = req.params.solicitudId;
@@ -46,6 +46,8 @@ exports.postAceptarSolicitud = async (req, res) => {
     if (caso) {
       caso.abogado = abogadoId;
       await caso.save();
+      // Si el caso fue creado, marca la solicitud como tal
+      solicitud.casoCreado = true;
     }
 
     // Actualiza el estado de la solicitud a 'aceptada'
@@ -60,3 +62,4 @@ exports.postAceptarSolicitud = async (req, res) => {
     res.redirect('/solicitudes');
   }
 };
+

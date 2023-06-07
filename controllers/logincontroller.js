@@ -21,6 +21,7 @@ exports.postLogin = async (req, res, next) => {
         // Autenticar al usuario
         req.login(user, function (err) {
             if (err) {
+                console.log(err);
                 console.error('Error al iniciar sesión:', err);
                 req.flash('error_msg', 'Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo.');
                 return res.redirect('/');

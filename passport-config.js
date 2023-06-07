@@ -12,6 +12,8 @@ module.exports = function(passport) {
           return done(null, false, { message: 'Usuario no encontrado' });
         }
 
+        console.log('Contraseña proporcionada:', password); // Imprime la contraseña proporcionada
+
         const isMatch = await user.comparePassword(password);
 
         if (isMatch) {

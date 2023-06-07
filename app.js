@@ -4,6 +4,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const AdminRouter = require('./Router/AdminRouter');
 const db = require('./db');
+
 console.log('Importando configuración de correo electrónico...');
 const { body, validationResult } = require('express-validator');
 const app = express();

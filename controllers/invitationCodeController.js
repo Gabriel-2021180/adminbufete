@@ -97,18 +97,19 @@ exports.postEnterInvitationCode = async (req, res) => {
 
 
 
+
 // Registrar un nuevo usuario con un código de invitación
 exports.postSignupWithInvitation = async (req, res) => {
     const { nombres, apellidos, username, ci, direccion, fechanac, phone, email, password } = req.body;
     const invitationCode = req.session.invitationCode;
-
+    console.log('esta es la contraseña que el usuario esta poniendo:  '+password);
+    
     // Comprueba si el código de invitación es válido
     const code = await InvitationCode.findOne({ code: invitationCode });
     if (!code || code.used) {
         req.flash('error_msg', 'El código de invitación no es válido o ya ha sido utilizado.');
         return res.redirect('/enter-invitation-code');
     }
-
 
     // Genera un token único
     const emailVerificationToken = crypto.randomBytes(32).toString('hex');
@@ -132,6 +133,7 @@ exports.postSignupWithInvitation = async (req, res) => {
     }
     
     const url = await uploadFile(req.file);
+    
     // Continúa con el registro del usuario como lo haces normalmente
     const newUser = new BufeteUser({
         nombres,
@@ -149,8 +151,7 @@ exports.postSignupWithInvitation = async (req, res) => {
         emailVerified: false,
     });
 
-    newUser.password = await newUser.encryptPassword(newUser.password);
-
+    // Guarda el nuevo usuario
     await newUser.save();
 
     // Marca el código de invitación como utilizado
@@ -159,8 +160,9 @@ exports.postSignupWithInvitation = async (req, res) => {
     await code.save();
 
     req.flash('success_msg', 'Te has registrado con éxito. Ahora puedes iniciar sesión.');
-    res.redirect('/login');
+    res.redirect('https://mail.google.com');
 };
+
 
 
 async function uploadFile(file) {

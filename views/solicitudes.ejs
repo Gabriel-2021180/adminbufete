@@ -57,8 +57,9 @@
               <td style="border: 1px solid #ccc; padding: 8px; color: white;">
                 <% if (solicitud.estado === 'pendiente') { %>
                   <form>
-                    <button type="button" class="aceptar-btn fas fa-check" data-solicitud-id="<%= _id %>" data-cliente-id="<%= cliente._id %>" data-abogado-id="<%= abogadoId %>" data-tipo-solicitud="<%= solicitud.tipo %>" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 3px;"> Aceptar</button>
-                    <button type="button" class="aceptar-btn fas fa-times" data-solicitud-id="<%= _id %>" data-cliente-id="<%= cliente._id %>" data-abogado-id="<%= abogadoId %>" style="padding: 5px 10px; background-color: #a71717; color: white; border: none; cursor: pointer; border-radius: 3px;"> Rechazar</button>
+                    <button type="button" class="aceptar-btn fas fa-check" data-solicitud-id="<%= _id %>" data-cliente-id="<%= cliente._id %>" data-abogado-id="<%= abogadoId %>" data-tipo-solicitud="<%= solicitud.tipoSolicitud %>" tipoSolicitud="<%=solicitud.tipoSolicitud%>" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 3px;"> Aceptar</button>
+
+                    <!--<button type="button" class="aceptar-btn fas fa-times" data-solicitud-id="<%= _id %>" data-cliente-id="<%= cliente._id %>" data-abogado-id="<%= abogadoId %>" style="padding: 5px 10px; background-color: #a71717; color: white; border: none; cursor: pointer; border-radius: 3px;"> Rechazar</button>-->
                   </form>
                 <% } %>
               </td>
@@ -106,14 +107,14 @@
             var clienteId = button.dataset.clienteId;
             var abogadoId = button.dataset.abogadoId;
             var tipoSolicitud = button.dataset.tipoSolicitud; // Obtén el tipo de solicitud
-
+            var tipoSS= button.dataset.tipoSolicitud; // Obtén el tipo de solicit
             // Asigna los valores a los campos ocultos del formulario de creación del caso
             document.getElementById('solicitudId').value = solicitudId;
             document.getElementById('clienteId').value = clienteId;
             document.getElementById('abogadoId').value = abogadoId;
 
             // Abre el modal de creación del caso solo si el tipo de solicitud es 'nuevo'
-            if (tipoSolicitud === 'nuevo') {
+            if (tipoSS === 'nuevo') {
               var modalInstance = document.getElementById('crearCasoModal');
               modalInstance.style.display = 'block';
             } else {

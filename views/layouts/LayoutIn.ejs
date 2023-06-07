@@ -22,11 +22,11 @@
   
   <body >
     <div class="wrapper">
-      <div class="sidebar" >
+      <div class="sidebar"  data="blue" >
         <!--
           Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
       -->
-        <div class="sidebar-wrapper" >
+        <div class="sidebar-wrapper">
           <div class="logo">
             <a href="javascript:void(0)" class="simple-text logo-mini">
               <img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="">
@@ -143,6 +143,7 @@
             </div>
           </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
         <script>
          
   document.addEventListener('DOMContentLoaded', function() {
@@ -150,7 +151,7 @@
       $(this).siblings().removeClass('active');
       $(this).addClass('active');
 
-      var new_color = $(this).data('red');
+      var new_color = $(this).data('blue');
 
       if ($sidebar.length != 0) {
         $sidebar.attr('data', new_color);

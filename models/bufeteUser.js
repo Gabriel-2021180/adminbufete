@@ -20,7 +20,10 @@ const bufeteUserSchema = new Schema({
     emailVerificationToken: String,
     estado: {type:Boolean, default:true},
     emailVerified: { type: Boolean, default: false },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 });
+
 
 bufeteUserSchema.methods.encryptPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
@@ -36,7 +39,10 @@ bufeteUserSchema.methods.comparePassword = async function(password) {
 bufeteUserSchema.pre('save', async function(next) {
     if (this.isModified('password') || this.isNew) {
         try {
-            this.password = await this.encryptPassword(this.password);
+            // Comprueba si la contraseña ya está encriptada
+            if (!this.password.startsWith('$2b$')) {
+                this.password = await this.encryptPassword(this.password);
+            }
             next();
         } catch (error) {
             next(error);
@@ -45,5 +51,6 @@ bufeteUserSchema.pre('save', async function(next) {
         next();
     }
 });
+
 
 module.exports = mongoose.model('BufeteUser', bufeteUserSchema);

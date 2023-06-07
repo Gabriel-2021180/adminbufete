@@ -230,4 +230,12 @@ router.post('/reuniones',ensureAuthenticated, CitasController.postReunion)
 router.post('/profile/edit',ensureAuthenticated,uploadeditprofileimage,ProfileController.postEditProfile)
 //ruta para jalar los datos del usuario para el campo edit
 router.get('/usuarios/:id', firstcontroller.editarUsuario);
+//olvide mi contraseña
+const forgotPasswordController = require('../controllers/forgotPasswordController');
+router.get('/forgot-password', forgotPasswordController.getForgotPassword);
+router.post('/forgot-password', forgotPasswordController.postForgotPassword);
+router.get('/reset-password', forgotPasswordController.getResetPassword);
+router.post('/reset-password', forgotPasswordController.postResetPassword);
+
 module.exports = router;
+

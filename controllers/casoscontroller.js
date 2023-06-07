@@ -131,6 +131,7 @@ exports.postCrearPago = async (req, res) => {
 exports.getPagosCaso = async (req, res) => {
   try {
     const user = req.user
+    const role = req.user.rol
     const casoId = req.params.id;
 
     const caso = await Caso.findById(casoId);
@@ -142,7 +143,7 @@ exports.getPagosCaso = async (req, res) => {
 
     const pagos = await Pago.find({ caso: casoId }).populate('cliente abogado');
 
-    res.render('pagos', { pagos,user });
+    res.render('pagos', { pagos,user,role });
   } catch (error) {
     console.error('Error al obtener los pagos:', error);
     res.status(500).json({ error: 'Ocurrió un error al obtener los pagos' });
@@ -234,18 +235,18 @@ exports.postArchivarCaso = async (req, res) => {
       return res.status(404).json({ message: 'Caso no encontrado' });
     }
 
-    // Verifica si el usuario autenticado es el mismo que el usuario asociado con el caso
+
     if (req.user._id.toString() !== caso.abogado._id.toString()) {
       return res.status(403).send('No tienes permiso para archivar este caso');
     }
 
-    // Cambia el estado del caso a false
+
     caso.estado = false;
 
-    // Guarda los cambios en la base de datos
+
     await caso.save();
 
-    // Redirige al usuario a la vista de sus casos
+
     res.redirect('/casos');
   } catch (error) {
     console.error('Error al archivar el caso:', error);
