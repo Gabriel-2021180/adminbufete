@@ -271,7 +271,7 @@ exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.userId;
     const { rol } = req.body;
-console.log(userId);
+
     // Encuentra el usuario por su ID
     const usuario = await Usuarios.findById(userId);
 
@@ -345,7 +345,7 @@ exports.editarUsuario = async (req, res) => {
 };
 
 exports.updateBufeteUser = async (req, res) => {
-  console.log('esta llamando a la wea para actualizar')
+ 
     try {
       const { userId, nombres, apellidos, username, ci, direccion, rol, fechanac, phone, email, password, image } = req.body;
   
@@ -419,7 +419,7 @@ exports.updateBufeteUser = async (req, res) => {
             const cliente = await Clientes.findById(caso.cliente);
 
             cliente.seekingReplacementLawyer = true;
-            console.log(cliente)
+            
             await cliente.save();
           }
         }

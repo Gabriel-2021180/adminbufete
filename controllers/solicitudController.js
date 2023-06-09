@@ -16,7 +16,7 @@ exports.getSolicitudes = async (req, res) => {
 
 
 exports.postAceptarSolicitud = async (req, res) => {
-  console.log('llamando a aceptar solicitud')
+  
   try {
     const solicitudId = req.params.solicitudId;
     const abogadoId = req.user._id;
@@ -41,7 +41,7 @@ exports.postAceptarSolicitud = async (req, res) => {
       solicitud.casoCreado = true;
     }
 
-    console.log('Actualizando estado de la solicitud a aceptada'); // Agrega esta línea
+   
 
     solicitud.estado = 'aceptada';
     await solicitud.save();

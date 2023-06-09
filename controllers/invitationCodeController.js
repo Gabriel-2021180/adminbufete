@@ -89,7 +89,7 @@ exports.postEnterInvitationCode = async (req, res) => {
     try {
       const { nombres, apellidos, username, ci, direccion, fechanac, phone, email, password } = req.body;
       const invitationCode = req.session.invitationCode;
-      console.log('esta es la contraseña que el usuario esta poniendo:  ' + password);
+      
   
       const code = await InvitationCode.findOne({ code: invitationCode });
       if (!code || code.used) {
@@ -110,7 +110,7 @@ exports.postEnterInvitationCode = async (req, res) => {
         await emailTransporter.sendMail(mailOptions);
       } catch (error) {
         req.flash('error_msg', 'No se pudo enviar el correo electrónico de verificación. Por favor, inténtalo de nuevo.');
-        console.log(error);
+       
         return res.redirect('/signup-with-invitation');
       }
   

@@ -10,6 +10,6 @@ mongoose.connect(url,{
 const db = mongoose.connection
 db.on('error',console.error.bind(console,'Error al conectar con mongoDB'))
 db.once('open',function callback() {
-    console.log("!conectado con mongodb")
+    
 })
 module.exports = db

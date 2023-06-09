@@ -10,7 +10,6 @@ exports.postCita = async (req, res) => {
     const abogadoId = req.user._id; // Asume que el ID del abogado está en req.user._id
     const cita = new Cita({ motivo, estado, fecha, hora, horaFin, abogado: abogadoId,cliente });
 
-    console.log('Recibida solicitud para guardar cita:', cita);
     await cita.save();
     res.redirect('/'); // Redirige a la página principal después de guardar la cita
   } catch (error) {
@@ -70,10 +69,10 @@ exports.postReunion = async (req, res) => {
       usuarios.push(usuarioActual); // Agregar al usuario actual a la lista
     }
 
-    console.log('Recibida solicitud para guardar reunion:', req.body);
+    
 
     const reunion = new Reunion({ asunto, estado, fecha, lugar, hora, horaFin, usuarios });
-    console.log('Datos de la reunion a guardar:', reunion);
+   
     await reunion.save();
 
     // Rellenar los datos de los usuarios invitados
