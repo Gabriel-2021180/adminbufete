@@ -222,69 +222,153 @@
       <form action="/signup-with-invitation" method="POST" enctype="multipart/form-data" style="width: 70%;">
         <h1 style="color: #e5e5e5;">Registro</h1>
         <table style="width: 100%;">
-            <tr>
-                <td>
-                    <label for="nombres">Nombres:</label>
-                    <input type="text" id="nombres" name="nombres" required style="width: 100%;">
-                </td>
-                <td>
-                    <label for="apellidos">Apellidos:</label>
-                    <input type="text" id="apellidos" name="apellidos" required style="width: 100%;">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="username">Nombre de usuario:</label>
-                    <input type="text" id="username" name="username" required style="width: 100%;">
-                </td>
-                <td>
-                  <label for="direccion">Dirección:</label>
-                  <input type="text" id="direccion" name="direccion" required style="width: 100%;">
-              </td>
-               
-            </tr>
-            <tr>
-              <td>
-                <label for="ci">CI:</label>
-                <input type="text" id="ci" name="ci" required style="width: 100%;">
+          <tr>
+            <td>
+              <label for="nombres">Nombres:</label>
+              <input type="text" id="nombres" name="nombres" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+" required title="Ingrese solo letras y espacios" style="width: 100%;">
             </td>
-                <td>
-                    <label for="descripcion">Descripción (Los clientes podrán verla en tu perfil):</label>
-                    <input type="text" id="descripcion" name="descripcion" required style="width: 100%;">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="fechanac">Fecha de nacimiento:</label>
-                    <input type="date" id="fechanac" name="fechanac" required style="width: 100%;">
-                </td>
-                <td>
-                  <label for="email">Correo electrónico:</label>
-                  <input type="email" id="email" name="email" required style="width: 100%;">
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label for="phone">Teléfono:</label>
-                <input type="text" id="phone" name="phone" required style="width: 100%;">
+            <td>
+              <label for="apellidos">Apellidos:</label>
+              <input type="text" id="apellidos" name="apellidos" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+" required title="Ingrese solo letras y espacios" style="width: 100%;">
             </td>
-                
-                <td>
-                    <label for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" required style="width: 100%;">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <label for="image">Imagen de perfil:</label>
-                    <input type="file" id="image" accept=".jpg, .jpeg, .png" name="profileimg" style="width: 100%;">
-                </td>
-            </tr>
+          </tr>
+          <tr>
+            <td>
+              <label for="username">Nombre de usuario:</label>
+              <input type="text" id="username" name="username" required style="width: 100%;">
+            </td>
+            <td>
+              <label for="direccion">Dirección:</label>
+              <input type="text" id="direccion" name="direccion" required style="width: 100%;">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="ci">CI:</label>
+              <input type="text" id="ci" name="ci" required style="width: 100%;">
+            </td>
+            <td>
+              <label for="descripcion">Descripción (Los clientes podrán verla en tu perfil):</label>
+              <input type="text" id="descripcion" name="descripcion" required style="width: 100%;">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="fechanac">Fecha de nacimiento:</label>
+              <input type="date" id="fechanac" name="fechanac" max="2005-12-31" required style="width: 100%;" >
+            </td>
+            <td>
+              <label for="email">Correo electrónico:</label>
+              <input type="email" id="email" name="email" required style="width: 100%;">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="phone">Teléfono:</label>
+              <input type="tel" id="phone" name="phone" pattern="[0-9]+" required title="Ingrese solo números" style="width: 100%;">
+            </td>
+            <td>
+              <label for="password">Contraseña:</label>
+              <input type="password" id="password" name="password" required style="width: 100%;">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <label for="image">Imagen de perfil:</label>
+              <input type="file" id="image" accept=".jpg, .jpeg, .png" name="profileimg" style="width: 100%;">
+            </td>
+          </tr>
         </table>
-        <button type="submit">Registrarse</button>
-    </form>
+        <button type="submit" id="registerButton" disabled>Registrarse</button>
+      </form>
+      
     
-    
-    
+      
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Variable para verificar si los campos son únicos
+  var isUsernameUnique = false;
+  var isCiUnique = false;
+  var isPhoneUnique = false;
+  var isEmailUnique = false;
+
+  // Función para habilitar o deshabilitar el botón de registro
+  function toggleRegisterButton() {
+    var registerButton = $('#registerButton');
+
+    // Verificar si todos los campos son únicos
+    if (isUsernameUnique && isCiUnique && isPhoneUnique && isEmailUnique) {
+      registerButton.prop('disabled', false); // Habilitar el botón de registro
+    } else {
+      registerButton.prop('disabled', true); // Deshabilitar el botón de registro
+    }
+  }
+
+  // Validación de campo de nombre de usuario
+  $('#username').on('input', function() {
+    const username = $(this).val();
+
+    $.get('/check-unique', { field: 'username', value: username }, function(data) {
+      if (!data.unique) {
+        alert('El nombre de usuario ya está en uso');
+        isUsernameUnique = false;
+      } else {
+        isUsernameUnique = true;
+      }
+
+      toggleRegisterButton(); // Actualizar el estado del botón de registro
+    });
+  });
+
+  // Validación de campo de cédula de identidad
+  $('#ci').on('input', function() {
+    const ci = $(this).val();
+
+    $.get('/check-unique', { field: 'ci', value: ci }, function(data) {
+      if (!data.unique) {
+        alert('El número de cédula de identidad ya está en uso');
+        isCiUnique = false;
+      } else {
+        isCiUnique = true;
+      }
+
+      toggleRegisterButton(); // Actualizar el estado del botón de registro
+    });
+  });
+
+  // Validación de campo de teléfono
+  $('#phone').on('input', function() {
+    const phone = $(this).val();
+
+    $.get('/check-unique', { field: 'phone', value: phone }, function(data) {
+      if (!data.unique) {
+        alert('El número de teléfono ya está en uso');
+        isPhoneUnique = false;
+      } else {
+        isPhoneUnique = true;
+      }
+
+      toggleRegisterButton(); // Actualizar el estado del botón de registro
+    });
+  });
+
+  // Validación de campo de correo electrónico
+  $('#email').on('input', function() {
+    const email = $(this).val();
+
+    $.get('/check-unique', { field: 'email', value: email }, function(data) {
+      if (!data.unique) {
+        alert('El correo electrónico ya está en uso');
+        isEmailUnique = false;
+      } else {
+        isEmailUnique = true;
+      }
+
+      toggleRegisterButton(); // Actualizar el estado del botón de registro
+    });
+  });
+});
+</script>
 </body>
 </html>

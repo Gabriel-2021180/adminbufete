@@ -55,6 +55,7 @@ exports.postSignup = async (req, res) => {
   // Envía el correo electrónico
   try {
     await emailTransporter.sendMail(mailOptions);
+    res.redirect('/usuarios');
   } catch (error) {
     req.flash('error_msg', 'No se pudo enviar el correo electrónico de verificación. Por favor, inténtalo de nuevo.');
     

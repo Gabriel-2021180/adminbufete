@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: #080710;
+  background-color: #1d1e20;
   overflow: hidden;
 }
 
@@ -29,7 +29,7 @@ body {
 }
 
 .shape:last-child {
-  background: linear-gradient(to right, #942833, #942833);
+  background: linear-gradient(to right, #2277AF, #2277AF);
   right: -30px;
   bottom: -80px;
 }
@@ -182,7 +182,7 @@ button {
     height: 60px;
     bottom: 40px;
     right: 40px;
-    background-color:#942833;
+    background-color:#2277AF;
     color: white;
     border-radius: 50px;
     text-align: center;

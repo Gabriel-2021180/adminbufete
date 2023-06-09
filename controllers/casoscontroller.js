@@ -29,6 +29,9 @@ exports.postCrearCaso = async (req, res) => {
         abogado: req.user._id,
         cliente: solicitud.cliente._id,
       });
+       solicitud.estado = 'aceptada';
+       await solicitud.save();
+
       await caso.save();
   
       // Redirige al abogado a la vista del caso específico

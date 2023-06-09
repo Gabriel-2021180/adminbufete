@@ -1,4 +1,4 @@
-  var calendar;
+var calendar;
   var eventos = []; // Aquí se almacenarán todas las citas y reuniones
   var usuariosInvitados = [];
   document.addEventListener('DOMContentLoaded', function () {
@@ -53,6 +53,7 @@
               fechaFin = new Date(fecha + 'T' + evento.horaFin);
             console.log(fechaFin)
               let event = {
+                id: evento._id,
                 title: evento.motivo || evento.asunto,
                 start: fechaInicio,
                 end: fechaFin,
@@ -69,6 +70,8 @@
               if (evento.tipo === 'reunion') {
                 event.extendedProps.lugar = evento.lugar;
                  // Asume que 'invitados' es un array de nombres
+                 event.extendedProps.invitados = evento.usuarios.map((usuario) => usuario.nombres).join(', ');
+
               }
             
               return event;
@@ -333,10 +336,14 @@
     }
 
     eventModal.style.display = 'block';
+    // Dentro de la función openEventModal
+    var eventId = info.event.id; // Obtener el ID del evento
     deleteEventBtn.onclick = function () {
       var tipo = info.event.color === 'blue' ? 'cita' : 'reunion'; // Azul para citas, rojo para reuniones
-      deleteEvent(info.event.id, tipo);
+      deleteEvent(eventId, tipo);
     };
+    
+
     
 
     eventClose.onclick = function () {
@@ -554,25 +561,41 @@
   
   function deleteEvent(eventId, tipo) {
     var ruta = tipo === 'cita' ? '/citas/' : '/reuniones/';
-    fetch(ruta + eventId + '/eliminar', { // Ahora es una solicitud POST
-      method: 'POST',
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al eliminar el evento');
-        }
-        return response.json();
-      })
-      .then((deletedEvent) => {
-        console.log('Evento eliminado exitosamente:', deletedEvent);
-        // Actualizar el calendario para reflejar el cambio
-        calendar.refetchEvents();
-      })
-      .catch((error) => {
-        console.error('Error al eliminar el evento:', error);
-      });
-  }
   
+    // Mostrar mensaje de confirmación con SweetAlert
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'El evento será eliminado permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(ruta + eventId + '/eliminar', {
+          method: 'POST', // Cambiar a solicitud POST
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Error al eliminar el evento');
+            }
+            return response.json();
+          })
+          .then((deletedEvent) => {
+            console.log('Evento eliminado exitosamente:', deletedEvent);
+            // Actualizar el calendario para reflejar el cambio
+            calendar.refetchEvents();
+            // Refrescar la página después de 1 segundo
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+          })
+          .catch((error) => {
+            console.error('Error al eliminar el evento:', error);
+          });
+      }
+    });
+  }
   
   
   

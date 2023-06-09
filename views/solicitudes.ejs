@@ -66,7 +66,7 @@
             </tr>
             <div id="crearCasoModal" class="modal">
               <div class="modal-content" style="width: 40%;">
-                <form action="/casos" method="POST" style="width: 100%;">
+                <form action="/casos" method="POST" style="width: 100%;" onsubmit="aceptarSolicitud(event)">
                   <% if(solicitudes.length > 0) { %>
                     <input type="hidden" name="solicitudId" value="<%= solicitudes[0]._id %>">
                   <% } %>
@@ -83,10 +83,11 @@
                     <option value="laboral">Laboral</option>
                     <option value="constitucional">Constitucional</option>
                     <option value="administrativo">Administrativo</option>
-                    <option value="comercial">Comercial</option>
+                    <option value="comercial">Comercial</option>              
                   </select>
                   <label for="descripcionCaso">Descripción</label>
                   <textarea id="descripcionCaso" name="descripcionCaso" required style="width: 100%; height: 100px;"></textarea>
+
                   <button type="submit" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 3px;">Crear caso</button>
                   <p style="color: gray;">Dale click en cualquier lugar de afuera para cerrar esta ventana</p>
                 </form>
@@ -138,6 +139,23 @@
           }
         };
       });
+        function aceptarSolicitud(event) {
+          event.preventDefault();
+
+          var form = event.target;
+          var solicitudId = form.solicitudId.value;
+
+          // Envía la solicitud de aceptación
+          var aceptarForm = document.createElement('form');
+          aceptarForm.method = 'POST';
+          aceptarForm.action = '/aceptar-solicitud/' + solicitudId;
+          document.body.appendChild(aceptarForm);
+          aceptarForm.submit();
+
+          // Envía el formulario original para crear el caso
+          form.submit();
+        }
+
     </script>
   </div>
 </body>

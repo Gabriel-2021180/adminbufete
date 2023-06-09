@@ -39,7 +39,45 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+exports.CargarUsuario = async (req, res) => {
+  try {
+    const usuarioId = req.params.id; // Obtiene el ID del usuario a editar
+    const {
+      nombres,
+      apellidos,
+      fechanac,
+      username,
+      phone,
+      direccion,
+      ci,
+      rol
+    } = req.body; // Obtiene los datos actualizados del usuario
 
+    const usuario = await Usuarios.findByIdAndUpdate(
+      usuarioId,
+      {
+        nombres,
+        apellidos,
+        fechanac,
+        username,
+        phone,
+        direccion,
+        ci,
+        rol
+      },
+      { new: true }
+    );
+
+    if (!usuario) {
+      return res.status(404).json({ message: 'El usuario no fue encontrado' });
+    }
+
+    return res.status(200).json({ message: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
+    return res.status(500).json({ message: 'Error al actualizar el usuario' });
+  }
+};
 exports.getusers = async (req, res) => {
 const role = req.user.rol
 const user = req.user
@@ -57,6 +95,91 @@ if (role !=="Abogado Jefe") {
 };
 
 //inicio de clientes
+exports.CargarCliente = async (req, res) => {
+  try {
+    const clienteId = req.params.id; // Obtiene el ID del cliente a editar
+    const {
+      nombres,
+      apellidos,
+      fechanac,
+      username,
+      phone,
+      direccion,
+      ci,
+      rol
+    } = req.body; // Obtiene los datos actualizados del cliente
+
+    const cliente = await Clientes.findByIdAndUpdate(
+      clienteId,
+      {
+        nombres,
+        apellidos,
+        fechanac,
+        username,
+        phone,
+        direccion,
+        ci,
+        rol
+      },
+      { new: true }
+    );
+
+    if (!cliente) {
+      return res.status(404).json({ message: 'El cliente no fue encontrado' });
+    }
+
+    return res.status(200).json({ message: 'Cliente actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar el cliente:', error);
+    return res.status(500).json({ message: 'Error al actualizar el cliente' });
+  }
+};
+exports.editarCliente = async (req, res) => {
+  const clienteId = req.params.id;
+
+  try {
+    const cliente = await Clientes.findById(clienteId).select('-_id -image');
+
+    if (!cliente) {
+      return res.status(404).json({ message: 'Cliente no encontrado' });
+    }
+
+    // Preparar los datos del cliente para enviar al cliente
+    const datosCliente = {
+      nombres: cliente.nombres,
+      apellidos: cliente.apellidos,
+      username: cliente.username,
+      ci: cliente.ci,
+      direccion: cliente.direccion,
+      
+      fechanac: cliente.fechanac.toISOString().split('T')[0],
+      phone: cliente.phone,
+      email: cliente.email,
+    };
+
+    res.json(datosCliente);
+  } catch (error) {
+    console.error('Error al obtener el cliente:', error);
+    res.status(500).json({ message: 'Error al obtener el cliente' });
+  }
+};
+
+exports.getClientes = async (req, res) => {
+  const role = req.user.rol;
+  const user = req.user;
+  if (role !== "Abogado Jefe") {
+    return res.status(403).send('¡Ey! ¡Lo que estás haciendo está mal! Será mejor que te retires, estimad@');
+  }
+  try {
+    const clientes = await Clientes.find({ estado: true, _id: { $ne: req.user._id } }); // Excluye al cliente actual
+    return res.render('clientes', { clientes, role, estado: true, user });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'ERROR AL OBTENER LOS CLIENTES',
+    });
+  }
+};
+
 exports.getAllclientes = async (req, res) => {
     try {
         // Obtiene el término de búsqueda de los parámetros de consulta

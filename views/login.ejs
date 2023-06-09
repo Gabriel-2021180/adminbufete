@@ -8,6 +8,12 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/login2style.css">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script>
+          function onSubmit(token) {
+            document.getElementById("login").submit();
+          }
+        </script>
         <script>
           function togglePassword() {
             var passwordField = document.getElementById("password");
@@ -36,13 +42,14 @@
         </div>
       </div>
     </div>
-     <form action="/login" method="post">
+     <form action="/login" method="post" id="login">
        <% const disableInputs = error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes'); %>
        <% if (error && error.length > 0) { %>
          <div class="alert alert-danger" role="alert">
            <%= error[0] %>
          </div>
        <% } %>
+       <h3>S.H.A.R.K</h3>
        <h3>Iniciar sesión</h3>
        <div class="go"><i class="">Bienvenid@ denuev@ al sistema administrativo SHARK!</i></div>
        <label for="username">Usuario</label>
@@ -53,7 +60,7 @@
        <span><i class="fa fa-eye" aria-hidden="true" type="button" id="eye" onclick="togglePassword()"></i></span>
    
       
-       <button type="submit" <%= error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes') ? 'disabled' : '' %> > Iniciar sesión </button>
+       <button class="g-recaptcha" data-sitekey="6LdOEXYmAAAAANFTapbBhTFdgaIA1E9zs5hcJ2Zy" data-callback="onSubmit" type="submit" <%= error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes') ? 'disabled' : '' %> > Iniciar sesión </button>
        <div class="">
         <br>
         <a href="/enter-invitation-code">Tienes un codigo? Registrate AQUI!</a>

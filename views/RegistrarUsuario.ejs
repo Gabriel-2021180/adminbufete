@@ -118,59 +118,84 @@
   
 </script>
 <div class="content">
-    <h2>Formulario de Registro</h2>
+    <h2>Registro de Empleados</h2>
     <form action="/registro" method="post" enctype="multipart/form-data">
-        <div class="form-row">
-      <div class="form-group col-md-6">
-        <h5 for="nombres">Nombres:</h5>
-        <input type="text" maxlength="50" class="form-control" id="nombres" name="nombres" placeholder="Ingrese el o los nombres" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="apellidos">Apellidos:</h5>
-        <input type="text" maxlength="50" class="form-control" id="apellidos" name="apellidos" placeholder="Ingrese el o los apellidos" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="username">Username:</h5>
-        <input type="text" maxlength="32" class="form-control" id="username" name="username" placeholder="Ingrese el nombre de usuario" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="ci">CI:</h5>
-        <input type="text" maxlength="10" class="form-control" id="ci" name="ci" placeholder="Ingrese el Nº de documento" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="direccion">Dirección:</h5>
-        <input type="text" maxlength="50" class="form-control" id="direccion" name="direccion" placeholder="Ingrese la dirección del usuario" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="rol">Rol:</h5>
-        <select class="form-control" id="rol" required>
-          <option value="" style="color: black;">Seleccione un rol</option>
-          <option value="Abogado" style="color: black;">Abogado</option>
-          <option value="Secretaria" style="color: black;">Secretaria</option>
-        </select>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="fechanac">Fecha de Nacimiento:</h5>
-        <input type="date" class="form-control" id="fechaNacimiento" name="fechanac" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="phone">Teléfono:</h5>
-        <input type="text" class="form-control"  maxlength="10" id="phone" name="phone" placeholder="Ingrese el número de teléfono del usuario" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="email">Email:</h5>
-        <input type="email" maxlength="50" class="form-control" id="email" name="email" placeholder="Ingrese el email del usuario" required>
-      </div>
-      <div class="form-group col-md-6">
-        <h5 for="password">Contraseña:</h5>
-        <input type="password" maxlength="50" class="form-control" id="password" name="password" placeholder="Ingrese una contraseña para el usuario" required>
-      </div>
-      
-      <button type="submit" class="btn btn-primary">Registrar</button>
-    </form>
+      <div class="form-row">
+    <div class="form-group col-md-6">
+      <h5 for="nombres">Nombres:</h5>
+      <input type="text" maxlength="50" class="form-control" id="nombres" name="nombres" placeholder="Ingrese el o los nombres" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="apellidos">Apellidos:</h5>
+      <input type="text" maxlength="50" class="form-control" id="apellidos" name="apellidos" placeholder="Ingrese el o los apellidos" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="username">Username:</h5>
+      <input type="text" maxlength="32" class="form-control" id="username" name="username" placeholder="Ingrese el nombre de usuario" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="ci">CI:</h5>
+      <input type="text" maxlength="10" class="form-control" id="ci" name="ci" placeholder="Ingrese el Nº de documento" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="direccion">Dirección:</h5>
+      <input type="text" maxlength="50" class="form-control" id="direccion" name="direccion" placeholder="Ingrese la dirección del usuario" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="rol">Rol:</h5>
+      <select class="form-control" id="rol" required>
+        <option value="" style="color: black;">Seleccione un rol</option>
+        <option value="Abogado" style="color: black;">Abogado</option>
+        <option value="Secretaria" style="color: black;">Secretaria</option>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="fechanac">Fecha de Nacimiento:</h5>
+      <input type="date" class="form-control" id="fechaNacimiento" name="fechanac" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="phone">Teléfono:</h5>
+      <input type="text" class="form-control"  maxlength="10" id="phone" name="phone" placeholder="Ingrese el número de teléfono del usuario" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="email">Email:</h5>
+      <input type="email" maxlength="50" class="form-control" id="email" name="email" placeholder="Ingrese el email del usuario" required>
+    </div>
+    <div class="form-group col-md-6">
+      <h5 for="password">Contraseña:</h5>
+      <input type="password" maxlength="50" class="form-control" id="password" name="password" placeholder="Ingrese una contraseña para el usuario" required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Registrar</button>
+  </form>
+    
   </div>
 </div>
+<script>
+  // Obtener el elemento del campo de fecha de nacimiento
+  const fechanacInput = document.getElementById('fechanac');
+  // Obtener el elemento del botón de registro
+  const registerButton = document.getElementById('registerButton');
 
+  // Escuchar el evento 'input' en el campo de fecha de nacimiento
+  fechanacInput.addEventListener('input', function() {
+    // Obtener la fecha de nacimiento seleccionada
+    const selectedDate = new Date(fechanacInput.value);
+    // Obtener la fecha actual
+    const currentDate = new Date();
+    // Calcular la diferencia de tiempo en milisegundos
+    const timeDiff = currentDate.getTime() - selectedDate.getTime();
+    // Calcular la edad en años
+    const age = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365));
+
+    // Habilitar o deshabilitar el botón de registro según la edad
+    if (age >= 18) {
+      registerButton.disabled = false;
+    } else {
+      registerButton.disabled = true;
+    }
+  });
+</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

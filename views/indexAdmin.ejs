@@ -4,34 +4,56 @@
 
 <%-include('../views/layouts/LayoutIn.ejs')%>
 <!--Inicio del modal de crear citas-->
+<style>
+  .swal2-container {
+  z-index: 9999 !important;
+}
 
+  .eventClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.eventClose:hover {
+  color: #f00;
+}
+
+</style>
 <div id="citaModal" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title"style="color: white;">Crear Cita</h2>
+      <div class="modal-header" style="background-color: #ffffff;">
+        <h2 class="modal-title">Crear Cita</h2>
       </div>
       <div class="modal-body">
-        <form style="background-color: #2a2f47;">
+        <form style="background-color: #fefeff;">
           
           <div class="form-group" >
-            <label for="title" style="color: white;">Motivo de la cita:</label>
-            <input type="text" id="title" name="motivo" class="form-control custom-input" style="height: 40px; width: 150px; font-size: larger;" required/>
+            <label for="title" style="color: rgb(0, 0, 0);">Motivo de la cita:</label>
+            <input type="text" style="color: black;" id="title" name="motivo" class="form-control custom-input" style="height: 40px; width: 150px; font-size: larger;" required/>
           </div>
           <div class="form-group">
-            <label for="date" style="color: white;">Fecha:</label>
+            <label for="date" style="color: rgb(0, 0, 0);">Fecha:</label>
             <input type="text" id="date" name="fecha" class="form-control custom-input" style="height: 60px; width: 150px; font-size: larger;" readonly />
           </div>
           <div class="form-group">
-            <label for="time" style="color: white;">Hora (HH:mm):</label>
+            <label for="time" style="color: rgb(0, 0, 0);">Hora (HH:mm):</label>
             
             <select id="time" name="hora" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
 
           </div>
-          <label for="cliente" style="color: white;">Cliente:</label>
-          <select id="cliente" name="cliente" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
+          <label for="cliente" style="color: rgb(0, 0, 0);">Cliente:</label>
+          <select id="cliente" style="color: black;" name="cliente" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
 
-          <div class="modal-footer">
+          <div class="modal-footer" style="background-color: #ffffff;">
             <button type="button" class="btn btn-secondary" id="xclose" data-dismiss="modal">Cerrar</button>
             <button type="submit" class="btn btn-primary" id="save-event">Guardar</button>
           </div>
@@ -49,7 +71,7 @@
 <div id="selectModal" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background-color: #ffffff;">
         <h2 class="modal-title">Crear Evento</h2>
         <span id="selectClose" class="close">&times;</span>
       </div>
@@ -66,41 +88,41 @@
 <div id="reunionModal" class="modal">
   <div class="modal-dialog">
     <div class="modal-content" style="width: 800px;">
-      <div class="modal-header">
-        <h2 class="modal-title" style="color: white;" >Crear Reunión</h2>
+      <div class="modal-header" style="background-color: #ffffff;">
+        <h2 class="modal-title"  >Crear Reunión</h2>
       </div>
       <div class="modal-body">
-        <form style="background-color: #2a2f47;">
+        <form style="background-color: #ffffff;">
           <div class="form-group">
-            <label for="asunto" style="color: white;">Asunto de la reunión:</label>
-            <input type="text" id="asuntoReunion" name="asunto" class="form-control custom-input" required/>
+            <label for="asunto" >Asunto de la reunión:</label>
+            <input type="text" style="color: black;" id="asuntoReunion" name="asunto" class="form-control custom-input" required/>
           </div>
           <div class="form-group">
-            <label for="lugar" style="color: white;">Lugar:</label>
-            <input type="text" id="lugarReunion" name="lugar" class="form-control custom-input" required/>
+            <label for="lugar" >Lugar:</label>
+            <input type="text" style="color: black;" id="lugarReunion" name="lugar" class="form-control custom-input" required/>
           </div>
           <div class="form-group">
-            <label for="reunionDate" style="color: white;">Fecha:</label>
+            <label for="reunionDate" >Fecha:</label>
             <input type="text" id="reunionDate" name="fecha" class="form-control custom-input" readonly />
           </div>
           <div class="form-group">
-            <label for="reunionTime" style="color: white;">Hora Inicio (HH:mm):</label>
+            <label for="reunionTime" >Hora Inicio (HH:mm):</label>
             <select id="reunionTimeInicio" name="hora" class="form-control custom-input"style="color: black; height: 60px; width: 150px;" required></select>
           </div>
           <div class="form-group">
-            <label for="reunionTimeFin" style="color: white;">Hora Fin (HH:mm):</label>
+            <label for="reunionTimeFin" >Hora Fin (HH:mm):</label>
             <select id="reunionTimeFin" name="horaFin" class="form-control custom-input" style="color: black; height: 60px; width: 150px;" required></select>
           </div>
           <!-- Campo de búsqueda de usuarios -->
           <div class="form-group">
-            <label for="searchUser" style="color: white;">Buscar usuario:</label>
-            <input type="text" id="searchUser" name="searchUser" class="form-control custom-input" />
+            <label for="searchUser" >Buscar usuario:</label>
+            <input type="text" id="searchUser" style="color: black;" name="searchUser" class="form-control custom-input" />
           </div>
           <!-- Tabla de resultados de búsqueda -->
           <div class="form-group">
-            <table id="searchResults" class="table table" >
+            <table id="searchResults" class="table table" style="color: black;">
               <thead>
-                <tr>
+                <tr data-id="{{usuario._id}}">
                   <th>Nombre</th>
                   <th>Acción</th>
                 </tr>
@@ -110,7 +132,7 @@
               </tbody>
             </table>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer" style="background-color: #ffffff;">
             <button type="button" class="btn btn-secondary" id="reunionClose" data-dismiss="modal">Cerrar</button>
             <button type="submit" class="btn btn-primary" id="save-reunion">Guardar</button>
           </div>
@@ -126,7 +148,7 @@
     <div class="modalinfo-content">
       <div class="modalinfo-header">
         <h2 class="modalinfo-title"style="color: black;">Detalles del evento</h2>
-        <span id="eventClose" class="close">&times;</span>
+        <span id="eventClose" class="eventClose">&times;</span>
       </div>
       <div class="modalinfo-body">
         <p id="eventMotivo" style="color: black;"></p>
@@ -157,25 +179,25 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.479);
+    background-color: rgba(0, 0, 0, 0.24);
   }
 
   .modal-content {
-    background-color: #1d1d1d93;
+    background-color: #ffffff;
     
     padding: 20px;
-    border: 1px solid #888;
+    
     width: 80%;
     max-width: 600px;
   }
   .modal-body{
-    background-color: #1d1d1d93;
+    background-color: #ffffff;
   }
   form{
-    background-color: #1d1d1d93;
+    background-color: #ffffff;
   }
   .modalinfo-title{
-    background-color: #1d1d1d93;
+    background-color: #ffffff;
     
   }
   .modal-show {
@@ -198,7 +220,7 @@
         <p id="reunionHoraInicio"style="color: black;"></p>
         <p id="reunionHoraFin"style="color: black;"></p>
         <p id="reunionEstado"style="color: black;"></p>
-        <button class="btn-primary">eliminar</button>
+        <button class="btn-primary" id="deleteEventBtn">eliminar</button>
       </div>
     </div>
   </div>

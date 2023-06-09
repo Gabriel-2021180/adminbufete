@@ -3,20 +3,52 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    
 
-<%-include('../views/layouts/LayoutIn.ejs')%>
+    @media print {
+  #layoutInSection {
+    display: none;
+  }
+ 
+}
+
+</style>
+<i style="font-style: normal;" id="layoutInSection">
+    <%-include('../views/layouts/LayoutIn.ejs')%>
+</i>
+
 <div class="content">
     <h2 style="color: white;">Lista de Clientes</h2>
+        <i style="font-style: normal;" id="layoutInSection">
+            <input id="search-inputc" class="form-control" type="text" placeholder="Buscar clientes...">
+        </i>
         
-        <input id="search-inputc" class="form-control" type="text" placeholder="Buscar clientes...">
     
     <div style="overflow: hidden;">
         <div class="text-right">
-    <a href="#" class="btn btn-primary">
+    <a href="#" class="btn btn-primary" id="layoutInSection">
         <i class="fas fa-plus"></i><i class="fas fa-user"></i>
     </a>
+     <!-- Botón para abrir el modal -->
+     <i style="font-style: normal;" id='layoutInSection'>
+        <button id="print-button"  class="btn btn-success fas fa-print" ></button>
+        </i>
+    
 </div>
-
+<script>
+    document.getElementById('print-button').addEventListener('click', function() {
+     // Ocultar la sección LayoutIn antes de imprimir
+     document.getElementById('layoutInSection').style.display = 'none';
+      
+      // Llamar a la función de impresión
+      window.print();
+     // Restaurar la visibilidad de la sección LayoutIn después de imprimir
+  document.getElementById('layoutInSection').style.display = 'block';
+      
+    });
+    
+        </script>
         <div id="cliente-table">
         <%-include('../views/clientes-tabla.ejs')%>
     </div>

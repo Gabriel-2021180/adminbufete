@@ -65,43 +65,73 @@
 </section>
 
 <!-- Modal -->
-<div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" >
-      <div class="modal-header" style="background-color: white; color: black;">
-        <center>
-          <h5 class="modal-title-centered text" id="registrationModalLabel" style="color: black;">Editar Usuario</h5>
-        </center>
+<div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color: rgb(255, 255, 255); border-radius: 1%;">
+      <div class="modal-header" style="background-color: rgb(255, 255, 255);">
+        <h5 class="modal-title" id="editModalLabel" style="background-color: rgb(255, 255, 255); color: black;">Editar Perfil</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="">
-        <form style="padding-left: 50px;">
-          <center>
-            <div class="form-row">
-              
-              <input type="hidden" id="userId" name="userId">
-
-              <div class="form-group col-md-5">
-                <label for="rol">Rol:</label>
-                <select class="form-control" id="rol" required style="width: 300px; height: 35px;" >
-                  <option value="" style="color: black;">Seleccione un rol</option>
-                  <option value="Abogado" style="color: black;">Abogado</option>
-                  <option value="Secretaria" style="color: black;">Secretaria</option>
-                </select>
-              </div>
-              
-          </center>
+      <div class="modal-body" style="background-color: rgb(255, 255, 255);">
+        <form id="editForm" enctype="multipart/form-data" style="color: rgb(0, 0, 0); align-content: center;">
+          <table>
+            <tr>
+              <td>
+                <label for="editnombres">Nombre:</label>
+                <input type="text" id="nombres" name="editnombres" value="<%= user.nombres %>">
+              </td>
+              <td>
+                <label for="editapellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="editapellidos" value="<%= user.apellidos %>">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="editfechanac">Fecha de Nacimiento:</label>
+                <input type="date" id="fechanac" name="editfechanac" value="<%= user.fechanac.toISOString().split('T')[0] %>" style="color: black;">
+              </td>
+              <td>
+                <label for="editusername">Username:</label>
+                <input type="text" id="username" name="editusername" value="<%= user.username %>">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="editphone">Teléfono:</label>
+                <input type="text" id="phone" name="editphone" value="<%= user.phone %>">
+              </td>
+              <td>
+                <label for="editdireccion">Dirección:</label>
+                <input type="text" id="direccion" name="editdireccion" value="<%= user.direccion %>">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="editci">CI:</label>
+                <input type="text" id="ci" name="editci" value="<%= user.ci %>">
+              </td>
+              <td>
+                <div class="form-group col-md-5">
+                  <label for="rol">Rol:</label>
+                  <select class="form-control" id="rol" name="rol" required style="width: 300px; height: 35px;">
+                    <option value="" style="color: black;">Seleccione un rol</option>
+                    <option value="Abogado" style="color: black;">Abogado</option>
+                    <option value="Secretaria" style="color: black;">Secretaria</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <!-- Agrega aquí el resto de los campos que deseas actualizar -->
+          </table>
+          <button class="btn btn-primary" onclick="guardarUsuario()" type="button">Guardar</button>
         </form>
-      </div>
-      <div class="modal-footer" style="background-color: white;">
-        <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
+
 
   
 <script>
@@ -157,78 +187,89 @@
 
 <script>
   $(document).ready(function() {
-    // Escucha el evento click en el botón de edición
-    $(document).on('click', '.btn-editar-usuario', function(event) {
-      const button = $(event.currentTarget); // Botón que activó el modal
-      const userId = button.data('id'); // ID del usuario
-  
-      // Hace una solicitud GET al servidor para obtener los datos del usuario
-      $.get(`/usuarios/${userId}`, function(data) {
-        console.log("Estos son los datos que llegaron:", data);
-        // Rellena los campos del formulario en el modal con los datos recibidos
-        $('#nombres').val(data.nombres);
-        $('#apellidos').val(data.apellidos);
-        $('#username').val(data.username);
-        $('#ci').val(data.ci);
-        $('#direccion').val(data.direccion);
-        $('#rol').val(data.rol);
-        $('#fechaNacimiento').val(data.fechanac);
-        $('#phone').val(data.phone);
-        $('#userId').val(userId); // Asegúrate de que estás asignando el ID del usuario al input correcto
-      });
-    });
-  });
-  
-  // Obtén la referencia al elemento <select>
-  var selectRol = document.getElementById('rol');
-  
-  // Establece la opción seleccionada según el valor de la variable 'rol'
-  selectRol.value = rol;
-  
-  function guardarUsuario() {
-  const userId = $('#userId').val();
-  const rol = $('#rol').val();
-
-  // Objeto con el campo 'rol' actualizado
-  var data = {
-    rol: rol,
-  };
-
-  // Realiza una solicitud POST al servidor para actualizar el usuario
-  console.log('/editusuarios/${userId}');
-  fetch('/editusuarios/${userId}', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      // Si la actualización fue exitosa, muestra un mensaje y cierra el modal
-      Swal.fire({
-        title: 'Éxito',
-        text: result.message,
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-      }).then(() => {
-        $('#registrationModal').modal('hide');
-        location.reload(); // Actualiza la página después de cerrar el modal
-      });
-    })
-    .catch((error) => {
-      Swal.fire({
-        title: 'Error',
-        text: 'Ocurrió un error al actualizar el usuario',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-      });
-    });
-}
-
-
-  </script>
-  
+   $(document).on('click', '.btn-editar-usuario', function(event) {
+     const button = $(event.currentTarget);
+     const userId = button.data('id');
+     console.log(userId);
+ 
+     // Almacena el valor de userId en un atributo personalizado del botón
+     $('#registrationModal').data('userId', userId);
+ 
+     $.get(`/usuarios/${userId}`, function(data) {
+       console.log("Estos son los datos que llegaron:", data);
+       $('#nombres').val(data.nombres);
+       $('#apellidos').val(data.apellidos);
+       $('#username').val(data.username);
+       $('#ci').val(data.ci);
+       $('#direccion').val(data.direccion);
+       $('#rol').val(data.rol);
+       $('#fechanac').val(data.fechanac);
+       $('#phone').val(data.phone);
+       $('#userId').val(userId);
+ 
+       var selectRol = document.getElementById('rol');
+       if (typeof data.rol !== 'undefined') {
+         selectRol.value = data.rol;
+       }
+     });
+   });
+ });
+ function guardarUsuario() {
+   const userId = $('#registrationModal').data('userId'); // Recupera el valor de userId del atributo personalizado del modal
+ 
+   const nombres = $('#nombres').val();
+   const apellidos = $('#apellidos').val();
+   const fechanac = $('#fechanac').val();
+   const username = $('#username').val();
+   const phone = $('#phone').val();
+   const direccion = $('#direccion').val();
+   const ci = $('#ci').val();
+   const rol = $('#rol').val();
+ 
+   var data = {
+     nombres: nombres,
+     apellidos: apellidos,
+     fechanac: fechanac,
+     username: username,
+     phone: phone,
+     direccion: direccion,
+     ci: ci,
+     rol: rol
+   };
+ 
+   fetch(`/editusuarios/${userId}`, {
+     method: 'PUT', // Cambia a PUT
+     headers: {
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify(data),
+   })
+     .then((response) => response.json())
+     .then((result) => {
+       Swal.fire({
+         title: 'Éxito',
+         text: result.message,
+         icon: 'success',
+         confirmButtonText: 'Aceptar',
+       }).then(() => {
+         console.log(userId);
+         console.log(data);
+         location.reload();
+       });
+ 
+     })
+     .catch((error) => {
+       Swal.fire({
+         title: 'Error',
+         text: 'Ocurrió un error al actualizar el usuario',
+         icon: 'error',
+         confirmButtonText: 'Aceptar',
+       });
+     });
+ }
+ 
+ 
+ </script>
   
 
 

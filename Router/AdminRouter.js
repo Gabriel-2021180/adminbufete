@@ -152,18 +152,36 @@ router.get('/citasJSON',ensureAuthenticated,CitasController.getCitasJSON)
 router.get('/reunionesJSON',ensureAuthenticated,CitasController.getReunionesJSON)
 // ruta.js
 router.post('/citas/:id/eliminar', CitasController.postEliminarCita);
-router.post('/reuniones/:id/eliminar', CitasController.postEliminarReunion);
 
+router.post('/reuniones/:id/eliminar', CitasController.postEliminarReunion);
 // ver usuarios
 router.get('/usuarios', ensureAuthenticated,firstcontroller.getusers);
-
+router.put('/editusuarios/:id', ensureAuthenticated,firstcontroller.CargarUsuario);
+router.put('/editclientes/:id', ensureAuthenticated,firstcontroller.CargarCliente);
 router.post('/editusuarios/:id', ensureAuthenticated,firstcontroller.updateUser);
 //parte de la invitacion
 router.post('/invitationCodes', ensureAuthenticated, InvitationCodeController.saveCode);
 router.get('/enter-invitation-code', InvitationCodeController.getEnterInvitationCode);
 router.post('/enter-invitation-code', InvitationCodeController.postEnterInvitationCode);
 router.get('/signup-with-invitation', InvitationCodeController.getcreateuserwithinvitation);
-router.post('/signup-with-invitation', uploadProfileImg, InvitationCodeController.postSignupWithInvitation);
+router.post(
+  '/signup-with-invitation',
+  uploadProfileImg,
+  [
+    body('nombres').trim().notEmpty().withMessage('El campo nombres no puede estar vacío.').escape(),
+    body('apellidos').trim().notEmpty().withMessage('El campo apellidos no puede estar vacío.').escape(),
+    body('username').trim().notEmpty().withMessage('El campo nombre de usuario no puede estar vacío.').escape(),
+    body('ci').trim().notEmpty().withMessage('El campo cédula de identidad no puede estar vacío.').escape(),
+    body('direccion').trim().notEmpty().withMessage('El campo dirección no puede estar vacío.').escape(),
+    body('fechanac').notEmpty().withMessage('El campo fecha de nacimiento no puede estar vacío.'),
+    body('phone').trim().notEmpty().withMessage('El campo teléfono no puede estar vacío.').escape(),
+    body('email').trim().notEmpty().withMessage('El campo email no puede estar vacío.').isEmail().withMessage('El email ingresado no es válido.').escape(),
+    body('password').notEmpty().withMessage('El campo contraseña no puede estar vacío.'),
+  ],
+  InvitationCodeController.postSignupWithInvitation
+);
+//validacion en tiempo real de datos
+router.get('/check-unique', InvitationCodeController.checkUniqueFields);
 router.post('/casos/:id/observaciones', ensureAuthenticated, casoController.postAgregarObservacion);
 //borrar documento
 router.put('/documentos/:id', DocumentoController.borrarDocumento);
@@ -178,20 +196,28 @@ router.put('/borrar/:id',ensureAuthenticated,firstcontroller.deleteUser)
 //'dar de baja a un cliente'
 router.put('/borrarcliente/:id',ensureAuthenticated,firstcontroller.deleteCliente) 
 //aceptar un caso avanzdo
-router.post('/aceptar-solicitud/:solicitudId', LoginController.isAuthenticated, solicitudAbogadoController.postAceptarSolicitud);
+router.post('/aceptar-solicitud/:solicitudId',ensureAuthenticated,solicitudAbogadoController.postAceptarSolicitud);
+
 
 //parte para las reuniones:
 // Ruta para obtener los usuarios
 router.get('/api/usuarios', ensureAuthenticated, async (req, res) => {
   try {
-    const nombre = req.query.nombre;
-    const usuarios = await User.find({ nombres: new RegExp(nombre, 'i') });
+    const searchTerm = req.query.nombre;
+    const usuarioActual = req.user._id; // Asume que el ID del usuario actual está en req.user._id
+
+    const usuarios = await User.find({
+      _id: { $ne: usuarioActual }, // Excluir al usuario actual
+      nombres: new RegExp(searchTerm, 'i') // Búsqueda insensible a mayúsculas y minúsculas
+    });
+
     res.json(usuarios);
   } catch (error) {
     console.error('Error al obtener los usuarios:', error);
     res.status(500).json({ message: 'Error al obtener los usuarios' });
   }
 });
+
 
 // Ruta para agregar un usuario a la reunión
 router.post('/api/reuniones/:reunionId/agregarUsuario', ensureAuthenticated, async (req, res) => {
@@ -230,6 +256,7 @@ router.post('/reuniones',ensureAuthenticated, CitasController.postReunion)
 router.post('/profile/edit',ensureAuthenticated,uploadeditprofileimage,ProfileController.postEditProfile)
 //ruta para jalar los datos del usuario para el campo edit
 router.get('/usuarios/:id', firstcontroller.editarUsuario);
+router.get('/clientes/:id', firstcontroller.editarCliente);
 //olvide mi contraseña
 const forgotPasswordController = require('../controllers/forgotPasswordController');
 router.get('/forgot-password', forgotPasswordController.getForgotPassword);
