@@ -11,6 +11,11 @@ const casoSchema = new Schema({
   estado: { type: Boolean, default: true },
   abogado: { type: Schema.Types.ObjectId, ref: 'BufeteUser' },
   cliente: { type: Schema.Types.ObjectId, ref: 'User' },
+  resultado: {
+    type: String,
+    enum: ['Ganado', 'Perdido', 'a medias',''], // Solo acepta estos tres valores
+    default: null, // Por defecto, el resultado es null (no se ha definido aún)
+  },
   observaciones: { type: [String] } 
 });
 

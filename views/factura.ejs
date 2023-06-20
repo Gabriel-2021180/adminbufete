@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>CodePen - Factura</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'><link rel="stylesheet" href="/css/factura-style.css">
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -20,7 +20,7 @@
         <p>oficina 1301</p>
       </div>
       <div class="col-2">
-        <img src="~/images/Mil-Pasos_Negro.png" />
+        <img src="https://storage.googleapis.com/primerstorage/logo%20ps.png" width="100%" height="100%" style="position: relative; right: 120%;"/>
       </div>
     </div>
   
@@ -87,7 +87,25 @@
       </div>
     </div>
 </div>
+<div class="row">
+  <div class="col-12">
+    <button onclick="generarPDF()" class="btn btn-primary">Descargar PDF</button>
+  </div>
+</div>
 <!-- partial -->
-  
+<script>
+  function generarPDF() {
+    const invoice = document.getElementById('app'); // Elige el elemento HTML que contiene la factura (puede variar según tu estructura)
+    
+    // Genera el PDF utilizando html2pdf.js
+    const options = {
+      filename: '<%= pago.cliente.nombres %>-factura.pdf', // Establece el nombre del PDF según el cliente
+      image: { type: 'jpeg', quality: 0.98 }, // Configura la calidad de la imagen del PDF
+      html2canvas: { scale: 2 }, // Escala el contenido HTML para mejorar la calidad de la imagen
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Establece el formato y la orientación del PDF
+    };
+    html2pdf().from(invoice).set(options).save();
+  }
+</script>
 </body>
 </html>

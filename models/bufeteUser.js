@@ -19,6 +19,7 @@ const bufeteUserSchema = new Schema({
     image: String,
     emailVerificationToken: String,
     estado: {type:Boolean, default:true},
+    especialidad: { type: String},
     emailVerified: { type: Boolean, default: false },
     resetPasswordToken: String,
     resetPasswordExpires: Date,

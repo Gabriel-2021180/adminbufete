@@ -67,9 +67,7 @@
             <div id="crearCasoModal" class="modal">
               <div class="modal-content" style="width: 40%;">
                 <form action="/casos" method="POST" style="width: 100%;" onsubmit="aceptarSolicitud(event)">
-                  <% if(solicitudes.length > 0) { %>
-                    <input type="hidden" name="solicitudId" value="<%= solicitudes[0]._id %>">
-                  <% } %>
+                
                   <h4 style="color:black">Crear caso</h4>
                   <input type="hidden" id="solicitudId" name="solicitudId" value="">
                   <input type="hidden" id="clienteId" name="clienteId" value="">

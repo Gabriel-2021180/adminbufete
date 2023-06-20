@@ -1,0 +1,73 @@
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<i style="font-style: normal;" id="layoutInSection">
+    <%-include('../views/layouts/LayoutIn.ejs')%>  
+</i>
+<img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="" id="layoutOnSection">
+<p style="color: white; font-family: 'Poppins',sans-serif;" id="layoutOnSection">Lista de Empleados Inactivos</p>
+<style>
+    #layoutOnSection{
+        display: none;
+        width: 100px;
+  height: 100px;
+  font-size: 25px;
+
+}
+    @media print {
+  #layoutInSection {
+    display: none;
+  }
+  #layoutOnSection{
+    display: block;
+    margin-left: 40px;
+  }
+  
+}
+
+</style>
+<div class="content">
+    <h2 style="color: white;" id="layoutInSection">Gestión de Empleados Inactivos</h2>
+    <i style="font-style: normal;" id="layoutInSection">
+        <input id="search-input" class="form-control" type="text" placeholder="Buscar usuarios Inactivos...">
+    </i>
+    <div style="overflow: hidden;">
+        <div class="text-right">
+
+    </a>
+        
+        
+        <br>
+
+</div>
+
+        <div id="user-table">
+        <%-include('../views/usuarios-inactivos-tabla.ejs')%>
+    </div>
+    </div>
+           
+       
+    
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        // Detecta cuando el valor del cuadro de búsqueda cambia
+        jQuery('#search-input').on('input', function() {
+            // Obtiene el valor del cuadro de búsqueda
+            var searchTerm = jQuery(this).val();
+
+            // Realiza una solicitud GET al servidor para buscar usuarios
+            jQuery.get('/usuarios-inactivos/buscar', { searchTerm: searchTerm }, function(data) {
+                // Actualiza la tabla de usuarios con los nuevos resultados
+                jQuery('#user-table').html(data);
+            });
+        });
+    });
+    
+    
+</script>
+<script src="/js/invitacioncode.js"></script>
+

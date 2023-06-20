@@ -59,8 +59,10 @@
        <input type="password"name="password" placeholder="Contraseña" id="password" <% if (disableInputs) { %>disabled<% } %>>
        <span><i class="fa fa-eye" aria-hidden="true" type="button" id="eye" onclick="togglePassword()"></i></span>
    
-      
+      <!--
        <button class="g-recaptcha" data-sitekey="6LdOEXYmAAAAANFTapbBhTFdgaIA1E9zs5hcJ2Zy" data-callback="onSubmit" type="submit" <%= error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes') ? 'disabled' : '' %> > Iniciar sesión </button>
+       -->
+       <button  data-callback="onSubmit" type="submit" <%= error && error.length > 0 && error[0].startsWith('Demasiadas solicitudes') ? 'disabled' : '' %> > Iniciar sesión </button>
        <div class="">
         <br>
         <a href="/enter-invitation-code">Tienes un codigo? Registrate AQUI!</a>

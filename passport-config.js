@@ -8,19 +8,19 @@ module.exports = function(passport) {
         const user = await BufeteUser.findOne({ username });
 
         if (!user) {
-          console.log('Usuario no encontrado');
+          
           return done(null, false, { message: 'Usuario no encontrado' });
         }
 
-        console.log('Contraseña proporcionada:', password); // Imprime la contraseña proporcionada
+        
 
         const isMatch = await user.comparePassword(password);
 
         if (isMatch) {
-          console.log('Contraseña correcta');
+          
           return done(null, user);
         } else {
-          console.log('Contraseña incorrecta');
+          
           return done(null, false, { message: 'Contraseña incorrecta' });
         }
       } catch (error) {

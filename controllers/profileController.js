@@ -30,6 +30,8 @@ exports.postEditProfile = async (req, res) => {
     user.direccion = req.body.editdireccion || user.direccion;
     user.fechanac = req.body.editfechanac || user.fechanac;
     user.phone = req.body.editphone || user.phone;
+    user.descripcion=req.body.editdescripcion || user.descripcion;
+    user.especialidad=req.body.editespecialidad || user.especialidad
 
     // Si se subió una nueva imagen, actualiza la URL de la imagen
     if (req.file) {

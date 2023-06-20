@@ -247,11 +247,26 @@
               <label for="ci">CI:</label>
               <input type="text" id="ci" name="ci" required style="width: 100%;">
             </td>
+            
+            
+          </tr>
+          <tr>
             <td>
               <label for="descripcion">Descripción (Los clientes podrán verla en tu perfil):</label>
               <input type="text" id="descripcion" name="descripcion" required style="width: 100%;">
             </td>
-          </tr>
+            <td>
+                <label for="especialidad">Especialidad:</label>
+                <select id="especialidad" name="especialidad"  style="width: 100%; color: #080710;">
+                    <option style="color: #080710;" value="">Seleccione una especialidad</option>
+                    <option style="color: #080710;" value="Derecho Civil">Derecho Civil</option>
+                    <option style="color: #080710;" value="Derecho Penal">Derecho Penal</option>
+                    <option style="color: #080710;" value="Derecho Laboral">Derecho Laboral</option>
+                    <option style="color: #080710;" value="Derecho Administrativo">Derecho Administrativo</option>
+                    <option style="color: #080710;" value="Derecho Constitucional">Derecho Constitucional</option>
+                </select>
+            </td>
+        </tr>
           <tr>
             <td>
               <label for="fechanac">Fecha de nacimiento:</label>
@@ -272,6 +287,8 @@
               <input type="password" id="password" name="password" required style="width: 100%;">
             </td>
           </tr>
+          
+        
           <tr>
             <td colspan="2">
               <label for="image">Imagen de perfil:</label>

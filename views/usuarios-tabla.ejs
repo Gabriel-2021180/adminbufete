@@ -43,8 +43,12 @@
                             </button>
                             </button>&nbsp;
                             <button type="button" id="layoutInSection" class="btn btn-danger btn-sm btn-icon" onclick="confirmarBorrado('<%= usuario.id %>')">
-                              <i class="fas fa-trash-alt"></i>
+                              <i class="fas fa-user-minus"></i>
                             </button>
+                            <button type="button" id="layoutInSection" class="btn btn-info btn-sm btn-icon btn-ver-estadisticas" data-id="<%= usuario.id %>">
+                              <i class="fas fa-chart-bar"></i>
+                          </button>
+                          
                             </div>
                         </td>
                     </tr>
@@ -267,7 +271,12 @@
        });
      });
  }
- 
+ $(document).on('click', '.btn-ver-estadisticas', function(event) {
+    const button = $(event.currentTarget);
+    const userId = button.data('id');
+    window.location.href = `/admin/userStats/${userId}`;
+});
+
  
  </script>
   

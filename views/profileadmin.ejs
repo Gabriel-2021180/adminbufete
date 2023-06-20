@@ -120,6 +120,29 @@
                 <label for="editci">CI:</label>
                 <input type="text" id="ci" name="editci" value="<%= user.ci %>">
               </td>
+              <td>
+                <label for="editespecialidad">Especialidad:</label>
+                <select id="editespecialidad" name="editespecialidad" required style="width: 100%; color: #080710;">
+                    <option style="color: #080710;" value="">Seleccione una especialidad</option>
+                    <option style="color: #080710;" value="Derecho Civil">Derecho Civil</option>
+                    <option style="color: #080710;" value="Derecho Penal">Derecho Penal</option>
+                    <option style="color: #080710;" value="Derecho Laboral">Derecho Laboral</option>
+                    <option style="color: #080710;" value="Derecho Administrativo">Derecho Administrativo</option>
+                    <option style="color: #080710;" value="Derecho Constitucional">Derecho Constitucional</option>
+                </select>
+              </td>
+            </tr>
+            
+           
+          <tr>
+            <td>
+              <label for="editci">descripcion:</label>
+              <input type="text" id="ci" name="editdescripcion" value="<%= user.descripcion %>" style="width: 240%;">
+            </td>
+          </tr>
+            <tr>
+              
+             
               <td colspan="2">
                 <div class="image-upload-container">
                   <label for="editimage" class="image-upload-label">Nueva imagen de perfil:</label>

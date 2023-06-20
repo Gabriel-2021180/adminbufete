@@ -3,45 +3,54 @@ const SolicitudAbogado=require('../models/SolicitudAbogado')
 const Documento = require('../models/documentos')
 const Pago = require('../models/Pagos')
 exports.postCrearCaso = async (req, res) => {
-    try {
-      const solicitudId = req.body.solicitudId; // Obtén el ID de la solicitud del formulario
-  
-      // Obtén la solicitud de la base de datos
-      const solicitud = await SolicitudAbogado.findById(solicitudId).populate('cliente');
-  
-      // Verifica si la solicitud existe
-      if (!solicitud) {
-        return res.status(404).json({ error: 'Solicitud no encontrada' });
-      }
-  
-      // Obtén los datos del formulario
-      const { nombreCaso, descripcionCaso,tipo } = req.body;
-  
-      // Crea el caso en la base de datos
-      const caso = new Caso({
-        nombrecaso: nombreCaso,
-        tipo: tipo,
-        descripcion: descripcionCaso,
-        fase: 'En proceso',
-        fechaini: Date.now(),
-        estado: true,
-        
-        abogado: req.user._id,
-        cliente: solicitud.cliente._id,
-      });
-       solicitud.estado = 'aceptada';
-       await solicitud.save();
+  try {
+    const solicitudId = req.body.solicitudId; 
+    
 
-      await caso.save();
-  
-      // Redirige al abogado a la vista del caso específico
-      res.redirect(`/casos/${caso._id}`);
-    } catch (error) {
-      console.error('Error al crear el caso:', error);
-      res.status(500).json({ error: 'Ocurrió un error al crear el caso' });
+    const solicitud = await SolicitudAbogado.findOneAndUpdate(
+      { _id: solicitudId },
+      { estado: 'aceptado' },
+      { new: true }
+    ).populate('cliente');
+
+    if (!solicitud) {
+      
+      return res.status(404).json({ error: 'Solicitud no encontrada' });
     }
-  };
-  
+
+    
+
+    // Imprime la solicitud actualizada en la consola
+    
+
+    const { nombreCaso, descripcionCaso,tipo } = req.body;
+
+    const caso = new Caso({
+      nombrecaso: nombreCaso,
+      tipo: tipo,
+      descripcion: descripcionCaso,
+      fase: 'En proceso',
+      fechaini: Date.now(),
+      estado: true,
+      resultado:'',
+      abogado: req.user._id,
+      cliente: solicitud.cliente._id,
+    });
+
+    await caso.save();
+
+    
+
+    res.redirect(`/casos/${caso._id}`);
+  } catch (error) {
+    console.error('Error al crear el caso:', error);
+    res.status(500).json({ error: 'Ocurrió un error al crear el caso' });
+  }
+};
+
+
+
+
   // casoController.js
   exports.getCaso = async (req, res) => {
     try {
@@ -62,6 +71,27 @@ exports.postCrearCaso = async (req, res) => {
       res.status(500).json({ error: 'Ocurrió un error al obtener el caso' });
     }
   };
+
+  exports.getCasoArchivado = async (req, res) => {
+    try {
+      const role=req.user.rol
+      const casoId = req.params.id;
+      const user=req.user
+      const caso = await Caso.findById(casoId).populate('abogado cliente');
+  
+      // Verifica si el usuario autenticado es el mismo que el usuario asociado con el caso
+      if (req.user._id.toString() !== caso.abogado._id.toString()) {
+        return res.status(403).send('ey!!!!!!! lo que estas haciendo esta mal violas la confidencialidad y no puedes entrar aqui asi que porfa retirate :)');
+      }
+  
+      const documentos = await Documento.find({ caso: casoId,estado:true });
+      res.render('casoArchivado', { caso, documentos,role,user });
+    } catch (error) {
+      console.error('Error al obtener el caso:', error);
+      res.status(500).json({ error: 'Ocurrió un error al obtener el caso' });
+    }
+  };
+  
   
   
   exports.getCasosAbogado = async (req, res) => {
@@ -75,6 +105,23 @@ exports.postCrearCaso = async (req, res) => {
   
       // Renderiza la vista de casos del abogado
       res.render('casos', { casos,role,user });
+    } catch (error) {
+      console.error('Error al obtener los casos del abogado:', error);
+      res.status(500).json({ error: 'Ocurrió un error al obtener los casos del abogado' });
+    }
+  };
+
+  exports.getCasosAbogadoArchivados = async (req, res) => {
+    try {
+      const user=req.user
+      const role=req.user.rol
+      const abogadoId = req.user._id; // Obtén el ID del abogado autenticado
+  
+      // Obtén los casos del abogado desde la base de datos
+      const casos = await Caso.find({ abogado: abogadoId,estado:false }).populate('abogado cliente');
+  
+      // Renderiza la vista de casos del abogado
+      res.render('casosArchivados', { casos,role,user });
     } catch (error) {
       console.error('Error al obtener los casos del abogado:', error);
       res.status(500).json({ error: 'Ocurrió un error al obtener los casos del abogado' });
@@ -229,6 +276,7 @@ exports.postEditarCaso = async (req, res) => {
 exports.postArchivarCaso = async (req, res) => {
   try {
     const casoId = req.params.id; // Obtén el ID del caso del formulario
+    const resultado = req.body.resultado; // Obtén el resultado del formulario
 
     // Encuentra el caso en la base de datos
     const caso = await Caso.findById(casoId);
@@ -238,22 +286,23 @@ exports.postArchivarCaso = async (req, res) => {
       return res.status(404).json({ message: 'Caso no encontrado' });
     }
 
-
+    // Verifica si el usuario autenticado es el mismo que el usuario asociado con el caso
     if (req.user._id.toString() !== caso.abogado._id.toString()) {
-      return res.status(403).send('No tienes permiso para archivar este caso');
+      return res.status(403).send('No tienes permiso para cerrar este caso');
     }
 
-
+    // Actualiza el resultado y el estado del caso
+    caso.resultado = resultado;
     caso.estado = false;
 
-
+    // Guarda los cambios en la base de datos
     await caso.save();
 
-
+    // Redirige al usuario a la vista de sus casos
     res.redirect('/casos');
   } catch (error) {
-    console.error('Error al archivar el caso:', error);
-    res.status(500).json({ message: 'Error al archivar el caso' });
+    console.error('Error al cerrar el caso:', error);
+    res.status(500).json({ message: 'Error al cerrar el caso' });
   }
 };
 

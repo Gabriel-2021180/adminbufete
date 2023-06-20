@@ -38,6 +38,117 @@ exports.getAllUsers = async (req, res) => {
       });
   }
 };
+//parte para los usuarios inactivos
+exports.getAllInactiveUsers = async (req, res) => {
+  try {
+      // Obtiene el término de búsqueda de los parámetros de consulta
+      const searchTerm = req.query.searchTerm;
+      let usuarios;
+
+      // Si el término de búsqueda no está vacío, realiza una búsqueda
+      if (searchTerm) {
+          usuarios = await Usuarios.find({
+              estado: false, // Cambia a false para obtener usuarios inactivos
+              _id: { $ne: req.user._id }, // Excluye al usuario actual
+              $or: [
+                  { username: new RegExp(searchTerm, 'i') },
+                  { nombres: new RegExp(searchTerm, 'i') },
+                  { apellidos: new RegExp(searchTerm, 'i') }
+              ]
+          });
+      } else {
+          // Si no hay término de búsqueda, muestra todos los usuarios inactivos excepto el actual
+          usuarios = await Usuarios.find({ estado: false, _id: { $ne: req.user._id } }); // Excluye al usuario actual
+      }
+
+      // Comprueba si la búsqueda devolvió algún resultado
+      if (usuarios.length > 0) {
+          // Devuelve solo el HTML para la tabla de usuarios
+          return res.render('usuarios-inactivos-tabla', { usuarios: usuarios });
+      } else {
+          // Si no hay usuarios, renderiza la tabla con un mensaje de no hay usuarios
+          return res.render('usuarios-inactivos-tabla', { usuarios: null });    
+      }
+  } catch (error) {
+      return res.status(500).json({
+          message: '$err',
+      });
+  }
+};
+exports.getAllInactiveClients = async (req, res) => {
+  try {
+      // Obtiene el término de búsqueda de los parámetros de consulta
+      const searchTerm = req.query.searchTerm;
+      let usuarios;
+
+      // Si el término de búsqueda no está vacío, realiza una búsqueda
+      if (searchTerm) {
+          usuarios = await Clientes.find({
+              estado: false, // Cambia a false para obtener usuarios inactivos
+              _id: { $ne: req.user._id }, // Excluye al usuario actual
+              $or: [
+                  { username: new RegExp(searchTerm, 'i') },
+                  { nombres: new RegExp(searchTerm, 'i') },
+                  { apellidos: new RegExp(searchTerm, 'i') }
+              ]
+          });
+          
+      } else {
+          // Si no hay término de búsqueda, muestra todos los usuarios inactivos excepto el actual
+          usuarios = await Clientes.find({ estado: false }); // Excluye al usuario actual
+          
+      }
+
+      // Comprueba si la búsqueda devolvió algún resultado
+      if (usuarios.length > 0) {
+          // Devuelve solo el HTML para la tabla de usuarios
+          return res.render('clientes-inactivos-tabla', { usuarios: usuarios });
+      } else {
+          // Si no hay usuarios, renderiza la tabla con un mensaje de no hay usuarios
+          return res.render('clientes-inactivos-tabla', { usuarios: null });    
+      }
+  } catch (error) {
+      return res.status(500).json({
+          message: '$err',
+      });
+  }
+};
+exports.getAllInactiveclients = async (req, res) => {
+  try {
+      // Obtiene el término de búsqueda de los parámetros de consulta
+      const searchTerm = req.query.searchTerm;
+      let usuarios;
+
+      // Si el término de búsqueda no está vacío, realiza una búsqueda
+      if (searchTerm) {
+          usuarios = await Clientes.find({
+              estado: false, // Cambia a false para obtener usuarios inactivos
+              _id: { $ne: req.user._id }, // Excluye al usuario actual
+              $or: [
+                  { username: new RegExp(searchTerm, 'i') },
+                  { nombres: new RegExp(searchTerm, 'i') },
+                  { apellidos: new RegExp(searchTerm, 'i') }
+              ]
+          });
+      } else {
+          // Si no hay término de búsqueda, muestra todos los usuarios inactivos excepto el actual
+          usuarios = await Usuarios.find({ estado: false, _id: { $ne: req.user._id } }); // Excluye al usuario actual
+      }
+
+      // Comprueba si la búsqueda devolvió algún resultado
+      if (usuarios.length > 0) {
+          // Devuelve solo el HTML para la tabla de usuarios
+          return res.render('clietes-inactivos-tabla', { usuarios: usuarios });
+      } else {
+          // Si no hay usuarios, renderiza la tabla con un mensaje de no hay usuarios
+          return res.render('clientes-inactivos-tabla', { usuarios: null });    
+      }
+  } catch (error) {
+      return res.status(500).json({
+          message: '$err',
+      });
+  }
+};
 
 exports.CargarUsuario = async (req, res) => {
   try {
@@ -93,7 +204,39 @@ if (role !=="Abogado Jefe") {
       });
   }
 };
+//usuarios inactivos
+exports.getinactiveusers = async (req, res) => {
+  const role = req.user.rol
+  const user = req.user
+  if (role !=="Abogado Jefe") {
+    return res.status(403).send('ey!!!!!!! lo que estas haciendo esta mal sera mejor que te retires estimad@');
+  }
+    try {
+        const usuarios = await Usuarios.find({ estado: false, _id: { $ne: req.user._id } }); // Excluye al usuario actual
+        return res.render('usuariosinactivos', { usuarios: usuarios, role, estado: true,user });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'ERROR AL OBTENER LOS USUARIOS',
+        });
+    }
+};
 
+exports.getinactiveClients = async (req, res) => {
+  const role = req.user.rol
+  const user = req.user
+  if (role !=="Abogado Jefe") {
+    return res.status(403).send('ey!!!!!!! lo que estas haciendo esta mal sera mejor que te retires estimad@');
+  }
+    try {
+        const usuarios = await Clientes.find({ estado: false}); // Excluye al usuario actual
+        return res.render('clientesinactivos', { usuarios: usuarios, role, estado: true,user });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'ERROR AL OBTENER LOS USUARIOS',
+        });
+    }
+};
+  
 //inicio de clientes
 exports.CargarCliente = async (req, res) => {
   try {
@@ -439,6 +582,48 @@ exports.updateBufeteUser = async (req, res) => {
         error: error.message,
       });
     }
+};
+
+//reactivar usuarios 
+exports.reactivateUser = async (req, res) => {
+  try {
+    // Obtiene el id del usuario desde los parámetros de la ruta
+    const userId = req.params.id;
+
+    // Busca el usuario en la base de datos y actualiza su estado a true
+    const user = await Usuarios.findByIdAndUpdate(userId, { estado: true });
+
+    // Si el usuario no se encuentra, envía un error
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Si todo sale bien, envía una respuesta exitosa
+    res.status(200).json({ message: 'Usuario reactivado exitosamente', user });
+  } catch (error) {
+    // Si algo sale mal, envía un error
+    res.status(500).json({ message: 'Hubo un error al reactivar el usuario', error });
+  }
+};
+exports.reactivateClient = async (req, res) => {
+  try {
+    // Obtiene el id del cliente desde los parámetros de la ruta
+    const userId = req.params.id;
+     
+    // Busca el cliente en la base de datos y actualiza su estado a true
+    const user = await Clientes.findByIdAndUpdate(userId, { estado: true });
+    
+    // Si el cliente no se encuentra, envía un error
+    if (!user) {
+      return res.status(404).json({ message: 'Cliente no encontrado' });
+    }
+
+    // Si todo sale bien, envía una respuesta exitosa
+    res.status(200).json({ message: 'Cliente reactivado exitosamente', user });
+  } catch (error) {
+    // Si algo sale mal, envía un error
+    res.status(500).json({ message: 'Hubo un error al reactivar el cliente', error });
+  }
 };
 
 exports.deleteCliente = async (req, res) => {

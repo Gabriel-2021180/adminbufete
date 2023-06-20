@@ -6,6 +6,7 @@ var calendar;
     calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       timeZone: 'local',
+      locale: 'es',
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
@@ -62,6 +63,7 @@ var calendar;
                 extendedProps: {
                   estado: evento.estado,
                   horaFin: evento.horaFin,
+                  tipo: evento.tipo,
                 },
                 color: evento.tipo === 'cita' ? 'blue' : 'red', // Azul para citas, rojo para reuniones
               };
@@ -239,6 +241,7 @@ var calendar;
           start: info.startStr + 'T' + selectedTime,
           end: info.startStr + 'T' + endTime,
           allDay: selectedTime === '',
+          tipo: tipo,
         };
 
         // Validar la fecha y el intervalo de tiempo seleccionado
@@ -339,8 +342,8 @@ var calendar;
     // Dentro de la función openEventModal
     var eventId = info.event.id; // Obtener el ID del evento
     deleteEventBtn.onclick = function () {
-      var tipo = info.event.color === 'blue' ? 'cita' : 'reunion'; // Azul para citas, rojo para reuniones
-      deleteEvent(eventId, tipo);
+      var color = info.event.color; // Obtener el color del evento
+      deleteEvent(eventId, color);
     };
     
 
@@ -559,9 +562,10 @@ var calendar;
     timeFinReunion.innerHTML = options;
   }
   
-  function deleteEvent(eventId, tipo) {
-    var ruta = tipo === 'cita' ? '/citas/' : '/reuniones/';
-  
+  function deleteEvent(eventId) {
+    var event = calendar.getEventById(eventId); // Obtener el evento por su ID
+  var ruta = event.extendedProps.tipo === 'cita' ? '/citas/' : '/reuniones/'; // Usa la propiedad 'tipo' para determinar la ruta
+  console.log(ruta)
     // Mostrar mensaje de confirmación con SweetAlert
     Swal.fire({
       title: '¿Estás seguro?',
@@ -575,12 +579,12 @@ var calendar;
         fetch(ruta + eventId + '/eliminar', {
           method: 'POST', // Cambiar a solicitud POST
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Error al eliminar el evento');
-            }
-            return response.json();
-          })
+         .then((response) => {
+  if (!response.ok) {
+    throw new Error('Error al eliminar el evento');
+  }
+  return response.json();
+         })
           .then((deletedEvent) => {
             console.log('Evento eliminado exitosamente:', deletedEvent);
             // Actualizar el calendario para reflejar el cambio
@@ -596,6 +600,7 @@ var calendar;
       }
     });
   }
+  
   
   
   

@@ -9,6 +9,7 @@ const firstcontroller = require('../controllers/firstController');
 const solicitudAbogadoController = require('../controllers/solicitudController');
 const CitasController = require('../controllers/CitasController');
 const casoController = require('../controllers/casoscontroller');
+const StatsController = require('../controllers/statsController');
 const { body } = require('express-validator');
 const DocumentoController = require('../controllers/documentosController');
 const { RateLimiterMemory } = require('rate-limiter-flexible');
@@ -81,7 +82,7 @@ router.post(
       req.rateLimiterRes = rateLimiterRes;
       next();
     } catch (err) {
-      console.log('Demasiadas solicitudes');
+      
       req.rateLimiterRes = err;
       const remainingTime = Math.ceil(err.msBeforeNext / 1000);
       req.flash('error', `Demasiadas solicitudes, por favor espera ${remainingTime} segundos antes de intentar de nuevo.`);
@@ -134,18 +135,24 @@ router.post(
 
 //casos
 router.get('/casos', ensureAuthenticated, casoController.getCasosAbogado);
+router.get('/casosArchivados', ensureAuthenticated, casoController.getCasosAbogadoArchivados);
 router.get('/casos/:id', ensureAuthenticated, casoController.getCaso);
+router.get('/casosArchivados/:id', ensureAuthenticated, casoController.getCaso);
 router.post('/casos', ensureAuthenticated, casoController.postCrearCaso);
 router.post('/subir-documento', ensureAuthenticated, upload, DocumentoController.subirDocumento);
 router.post('/casos/:id/editar', casoController.postEditarCaso);
 router.post('/casos/:id/archivar', casoController.postArchivarCaso);
-
-
-
+//stats
+router.get('/stats', ensureAuthenticated,StatsController.getUserStats)
+//funciones del super admin
+router.get('/admin/userStats/:id',ensureAuthenticated,StatsController.getAdminUserStats)
 router.get('/clientesDelAbogado', ensureAuthenticated, CitasController.getClientesDelAbogado);
 router.get('/clientes',ensureAuthenticated,firstcontroller.getclientes)
 router.get('/clientes/buscar',ensureAuthenticated,firstcontroller.getAllclientes)
 router.get('/usuarios/buscar',ensureAuthenticated,firstcontroller.getAllUsers)
+router.get('/usuarios-inactivos/buscar',ensureAuthenticated,firstcontroller.getAllInactiveUsers)
+
+router.get('/clientes-inactivos/buscar', ensureAuthenticated, firstcontroller.getAllInactiveClients);
 //citas
 router.post('/citas',ensureAuthenticated,CitasController.postCita)
 router.get('/citasJSON',ensureAuthenticated,CitasController.getCitasJSON)
@@ -156,9 +163,17 @@ router.post('/citas/:id/eliminar', CitasController.postEliminarCita);
 router.post('/reuniones/:id/eliminar', CitasController.postEliminarReunion);
 // ver usuarios
 router.get('/usuarios', ensureAuthenticated,firstcontroller.getusers);
+router.get('/usuariosInactivos',ensureAuthenticated,firstcontroller.getinactiveusers)
+
+router.get('/clientesInactivos',ensureAuthenticated,firstcontroller.getinactiveClients)
+
 router.put('/editusuarios/:id', ensureAuthenticated,firstcontroller.CargarUsuario);
 router.put('/editclientes/:id', ensureAuthenticated,firstcontroller.CargarCliente);
 router.post('/editusuarios/:id', ensureAuthenticated,firstcontroller.updateUser);
+//reactivar usuarios
+router.put('/reactivar/:id', ensureAuthenticated,firstcontroller.reactivateUser);
+router.put('/reactivarc/:id', ensureAuthenticated, firstcontroller.reactivateClient);
+
 //parte de la invitacion
 router.post('/invitationCodes', ensureAuthenticated, InvitationCodeController.saveCode);
 router.get('/enter-invitation-code', InvitationCodeController.getEnterInvitationCode);

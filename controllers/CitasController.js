@@ -4,6 +4,7 @@ const Caso = require('../models/casos');
 const User = require('../models/clientes');
 const BufeteUser=require('../models/bufeteUser')
 const mongoose = require('mongoose');
+const moment = require('moment');
 exports.postCita = async (req, res) => {
   try {
     const { motivo, estado, fecha, hora, horaFin, cliente } = req.body;
@@ -21,19 +22,23 @@ exports.postCita = async (req, res) => {
 
 exports.getCitasJSON = async (req, res) => {
   try {
-    const usuarioActual = req.user._id; // Asume que el ID del usuario actual está en req.user._id
-    const fechaActual = new Date(); // Fecha y hora actual
+    const usuarioActual = req.user._id;
 
-    // Buscar las citas donde el usuario actual es el cliente y la fecha de la cita es posterior a la fecha actual
+    // Obtener la fecha y hora actual en UTC con moment.js
+    const fechaActual = moment.utc().startOf('day').toDate();
+
+    // Buscar las citas donde el usuario actual es el cliente y la fecha de la cita es mayor o igual a la fecha actual
     const citas = await Cita.find({
-      cliente: usuarioActual,
-      fecha: { $gte: fechaActual } // Filtrar solo las citas futuras
+      activo: true,
+      abogado: usuarioActual,
+      fecha: { $gte: fechaActual } // Filtrar las citas de hoy y futuras
     }).populate('abogado', 'nombres');
 
     // Convertir las fechas a una cadena sin convertir la zona horaria
     const citasConFechasUTC = citas.map((cita) => {
       const fechaUTC = cita.fecha.toISOString().split('T')[0];
       const estado = getEstadoCita(cita); // Obtener el estado de la cita
+
       return { ...cita.toObject(), fecha: fechaUTC, horaFin: cita.horaFin, estado };
     });
 
@@ -43,15 +48,19 @@ exports.getCitasJSON = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener las citas' });
   }
 };
-function getEstadoCita(cita) {
-  const fechaActual = new Date(); // Fecha y hora actual
-  const fechaCita = cita.fecha;
-  const horaInicio = new Date(fechaCita.getFullYear(), fechaCita.getMonth(), fechaCita.getDate(), cita.hora.split(':')[0], cita.hora.split(':')[1]);
-  const horaFin = new Date(fechaCita.getFullYear(), fechaCita.getMonth(), fechaCita.getDate(), cita.horaFin.split(':')[0], cita.horaFin.split(':')[1]);
 
-  if (fechaActual < horaInicio) {
+function getEstadoCita(cita) {
+  // Obtener la fecha y hora actual en UTC con moment.js
+  const fechaActual = moment.utc();
+
+  // Crear objetos moment.js para la hora de inicio y fin de la cita en UTC
+  const fechaCita = moment.utc(cita.fecha);
+  const horaInicio = fechaCita.clone().hour(cita.hora.split(':')[0]).minute(cita.hora.split(':')[1]);
+  const horaFin = fechaCita.clone().hour(cita.horaFin.split(':')[0]).minute(cita.horaFin.split(':')[1]);
+
+  if (fechaActual.isBefore(horaInicio)) {
     return 'Pendiente';
-  } else if (fechaActual >= horaInicio && fechaActual <= horaFin) {
+  } else if (fechaActual.isBetween(horaInicio, horaFin)) {
     return 'En curso';
   } else {
     return 'Terminada';
@@ -92,11 +101,13 @@ exports.postReunion = async (req, res) => {
 exports.getReunionesJSON = async (req, res) => {
   try {
     const bufeteUserId = req.user._id;
-    const fechaActual = new Date();
+
+    // Obtener la fecha y hora actual en UTC con moment.js
+    const fechaActual = moment.utc().startOf('day').toDate();
 
     const reuniones = await Reunion.find({
       usuarios: bufeteUserId,
-      fecha: { $gte: fechaActual },
+      fecha: { $gte: fechaActual }, // Filtrar las reuniones de hoy y futuras
       activo: true // Filtrar solo las reuniones activas
     }).populate('usuarios', 'nombres');
 
@@ -114,19 +125,23 @@ exports.getReunionesJSON = async (req, res) => {
 };
 
 function getEstadoReunion(reunion) {
-  const fechaActual = new Date(); // Fecha y hora actual
-  const fechaReunion = reunion.fecha;
-  const horaInicio = new Date(fechaReunion.getFullYear(), fechaReunion.getMonth(), fechaReunion.getDate(), reunion.hora.split(':')[0], reunion.hora.split(':')[1]);
-  const horaFin = new Date(fechaReunion.getFullYear(), fechaReunion.getMonth(), fechaReunion.getDate(), reunion.horaFin.split(':')[0], reunion.horaFin.split(':')[1]);
+  // Obtener la fecha y hora actual en UTC con moment.js
+  const fechaActual = moment.utc();
 
-  if (fechaActual < horaInicio) {
+  // Crear objetos moment.js para la hora de inicio y fin de la reunion en UTC
+  const fechaReunion = moment.utc(reunion.fecha);
+  const horaInicio = fechaReunion.clone().hour(reunion.hora.split(':')[0]).minute(reunion.hora.split(':')[1]);
+  const horaFin = fechaReunion.clone().hour(reunion.horaFin.split(':')[0]).minute(reunion.horaFin.split(':')[1]);
+
+  if (fechaActual.isBefore(horaInicio)) {
     return 'Pendiente';
-  } else if (fechaActual >= horaInicio && fechaActual <= horaFin) {
+  } else if (fechaActual.isBetween(horaInicio, horaFin)) {
     return 'En curso';
   } else {
     return 'Terminada';
   }
 }
+
 exports.getClientesDelAbogado = async (req, res) => {
   try {
     const abogadoId = req.user._id; // Asume que el ID del abogado está en req.user._id

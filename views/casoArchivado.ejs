@@ -91,75 +91,18 @@
   <div class="content">
   <h1>Detalles del caso</h1>
   <br>
-  <button id="editarCasoBtn">Editar Caso</button>
+  
   <!-- Botón para abrir el modal -->
-  <button id="agregarObservacionBtn">Agregar observación</button>
+  
   <!-- Botón para abrir el modal de pago -->
-  <button id="agregarPagoBtn">Agregar pago</button>
+  
   <button onclick="window.location.href='/casos/<%= caso._id %>/pagos'">Ver Pagos</button>
-  <button id="cerrarCasoBtn" style="background-color: firebrick;" >Cerrar Caso</button>
- <!-- Modal para agregar observación -->
-<div id="agregarObservacionModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
-  <div style="background-color: #fff; width: 400px; margin: 100px auto; padding: 20px; border-radius: 4px;">
-    <form id="agregarObservacionForm" method="POST" action="/casos/<%= caso._id %>/observaciones">
-      <h4 style="color:black" for="observacion">Observación:</h4>
-      <textarea id="observacion" name="observacion" required></textarea>
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px;">
-        <button type="submit" style="background-color: rgb(0, 68, 255); color: white; border: none;  border-radius: 4px;">Agregar observación</button>
-        <button id="cerrarObservacionModalBtn" style="background-color: firebrick; color: white; border: none;  border-radius: 4px;">Cerrar</button>
-      </div>
-    </form>
-  </div>
-</div>
+  
+ 
 
 
- <!-- Modal para editar -->
- <div id="editarCasoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
-  <div style="background-color: #fff; width: 400px; margin: 100px auto; padding: 20px; border-radius: 4px;">
-    <form id="editarCasoForm" method="POST" action="/casos/<%= caso._id %>/editar">
-      <h4 style="color: black;">Editar caso</h4>
-      
-      <label for="nombreCaso">Nombre del caso:</label>
-      <input type="text" id="nombreCaso" name="editnombreCaso" value="<%= caso.nombrecaso %>" required>
 
-      <label for="descripcion">Descripción:</label>
-      <textarea id="descripcion" name="editdescripcion" required><%= caso.descripcion %></textarea>
-
-      <label for="tipo">Tipo:</label>
-      <select id="tipo" name="edittipo" required>
-        <option value="<%= caso.tipo%>">Selecciona el tipo de caso</option>
-                    <option value="penal">Penal</option>
-                    <option value="civil">Civil</option>
-                    <option value="laboral">Laboral</option>
-                    <option value="constitucional">Constitucional</option>
-                    <option value="administrativo">Administrativo</option>
-                    <option value="comercial">Comercial</option>
-      </select>
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px;">
-        <button type="submit" style="background-color: rgb(0, 68, 255); color: white; border: none; border-radius: 4px;">Guardar cambios</button>
-        
-      </div>
-    </form>
-    <button id="cerrarEditarCasoModalBtn" style="background-color: firebrick; color: white; border: none; border-radius: 4px;">Cerrar</button>
-  </div>
-</div>
-<!-- Modal para cerrar el caso -->
-<div id="cerrarCasoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
-  <div style="background-color: #fff; width: 400px; margin: 100px auto; padding: 20px; border-radius: 4px;">
-    <form id="cerrarCasoForm" method="POST" action="/casos/<%= caso._id %>/archivar "> 
-      <h4 style="color:black" for="resultado">Resultado del caso:</h4>
-      <select id="resultado" name="resultado" required>
-        <option value="Ganado">Ganado</option>
-        <option value="Perdido">Perdido</option>
-        <option value="a medias">a medias</option>
-      </select>
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px;">
-        <button type="submit" style="background-color: rgb(0, 68, 255); color: white; border: none;  border-radius: 4px;">Cerrar Caso</button>
-        <button type="button" id="cerrarCasoModalBtn" style="background-color: firebrick; color: white; border: none;  border-radius: 4px;">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
+ 
 
 
 <!-- JavaScript para manejar el modal de agregar observación -->
@@ -265,14 +208,14 @@
           <td><%= caso.nombrecaso %></td>
           <td><%= caso.descripcion %></td>
           <td><%= caso.tipo %></td>
-          <td><%= caso.abogado.nombres %> <%= caso.abogado.apellidos %></td>
-          <td><%= caso.cliente.nombres %> <%= caso.cliente.apellidos %></td>
+          <td><%= caso.abogado.username %></td>
+          <td><%= caso.cliente.username %></td>
         </tr>
       </tbody>
     </table>
   <br><br>
     <h2>Documentos</h2> <!-- Botón para abrir el modal de agregar documento -->
-    <button id="agregarDocumentoBtn">Agregar Documento</button>
+    
   
     <% if (documentos && documentos.length > 0) { %>
       <table>
@@ -288,7 +231,7 @@
               <td><%= documento.titulo %></td>
               <td>
                 <button onclick="verDocumento('<%= documento._id %>')">Ver</button>
-                <button style="background-color: firebrick; color: white; border: none;" onclick="borrarDocumento('<%= documento._id %>')">Quitar</button>
+              
               </td>
             </tr>
           <% }) %>

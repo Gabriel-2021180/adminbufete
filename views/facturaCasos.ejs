@@ -6,6 +6,8 @@
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/css/factura-style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+
 </head>
 <body>
 <div id="app" class="col-11">
@@ -20,7 +22,9 @@
       <p>oficina 1301</p>
     </div>
     <div class="col-2">
-      <img src="https://storage.googleapis.com/primerstorage/logo%20ps.png" width="100%" height="100%" style="position: relative; right: 120%;"/>
+      <img src="https://storage.googleapis.com/primerstorage/logo%20ps.png" width="100" height="100" style="position: relative; right: 120%;"/>
+
+
     </div>
   </div>
 
@@ -108,17 +112,54 @@
 
 <script>
   function generarPDF() {
-    const invoice = document.getElementById('app'); // Elige el elemento HTML que contiene la factura (puede variar según tu estructura)
-    
-    // Genera el PDF utilizando html2pdf.js
-    const options = {
-      filename: '<%= pagos[0].cliente.nombres %>-factura.pdf', // Establece el nombre del PDF según el cliente
-      image: { type: 'jpeg', quality: 0.98 }, // Configura la calidad de la imagen del PDF
-      html2canvas: { scale: 2 }, // Escala el contenido HTML para mejorar la calidad de la imagen
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Establece el formato y la orientación del PDF
-    };
-    html2pdf().from(invoice).set(options).save();
+  var pagos = <%= JSON.stringify(pagos) %>; // Convertimos los pagos a JSON
+
+  // Creamos el contenido de la tabla
+  var body = [];
+  var total = 0;
+  for(let i=0; i < pagos.length; i++) {
+    body.push([pagos[i].detalle, pagos[i].monto + ' Bs']);
+    total += pagos[i].monto;
   }
+  body.push(['Total Factura', total + ' Bs']);
+
+  // Creamos el documento
+  var docDefinition = {
+    content: [
+      { text: 'Factura', fontSize: 22 },
+      { text: 'Bufete de Abogados Azurduy Y Asociados', fontSize: 16 },
+      'La Paz-Bolivia - Calle Juan de la Riva N°1406, Esquina Loayza Edificio "Alborada"',
+      'Piso 13, oficina 1301',
+      { text: 'Facturar a', fontSize: 14 },
+      pagos[0].cliente.nombres + ' ' + pagos[0].cliente.apellidos,
+      { text: 'NIT/CI Cliente:', fontSize: 14 },
+      pagos[0].cliente.ci,
+      { text: 'Fecha de Pago', fontSize: 14 },
+      pagos[0].fechaHora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      { text: 'Hora de Pago', fontSize: 14 },
+      pagos[0].fechaHora.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+      { text: 'Correo de Cliente', fontSize: 14 },
+      pagos[0].cliente.email,
+      {
+        style: 'tableExample',
+        table: {
+          body: body
+        }
+      },
+      { text: 'Forma de Pago:', fontSize: 14 },
+      'Efectivo'
+    ],
+    styles: {
+      tableExample: {
+        margin: [0, 5, 0, 15]
+      }
+    }
+  };
+
+  // Generamos el PDF
+  pdfMake.createPdf(docDefinition).download(pagos[0].cliente.nombres + '-factura.pdf');
+}
+
 </script>
 </body>
 </html>

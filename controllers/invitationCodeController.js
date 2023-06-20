@@ -21,8 +21,8 @@ exports.saveCode = async (req, res) => {
       created_at: { $gte: oneDayAgo }
     });
 
-    if (count >= 10) {
-      return res.status(400).json({ message: 'Has alcanzado el límite de 3 códigos de invitación por día' });
+    if (count >= 4) {
+      return res.status(400).json({ message: 'Has alcanzado el límite de 4 códigos de invitación por día' });
     }
 
     const newCode = new InvitationCode({ code, created_by: req.user._id, created_at: now });
@@ -87,7 +87,7 @@ exports.postEnterInvitationCode = async (req, res) => {
 
   exports.postSignupWithInvitation = async (req, res) => {
     try {
-      const { nombres, apellidos, username, ci, direccion, fechanac, phone, email, password } = req.body;
+      const { nombres, apellidos, username, ci, direccion, fechanac, phone, email, password,descripcion,especialidad } = req.body;
       const invitationCode = req.session.invitationCode;
       
   
@@ -121,6 +121,7 @@ exports.postEnterInvitationCode = async (req, res) => {
         apellidos: DOMPurify.sanitize(apellidos),
         username: DOMPurify.sanitize(username),
         ci: DOMPurify.sanitize(ci),
+        descripcion:DOMPurify.sanitize(descripcion),
         direccion: DOMPurify.sanitize(direccion),
         rol: 'Abogado',
         fechanac: DOMPurify.sanitize(fechanac),
@@ -128,6 +129,7 @@ exports.postEnterInvitationCode = async (req, res) => {
         email: DOMPurify.sanitize(email),
         password: DOMPurify.sanitize(password),
         image: url,
+        especialidad: DOMPurify.sanitize(especialidad),
         emailVerificationToken,
         emailVerified: false,
       });
