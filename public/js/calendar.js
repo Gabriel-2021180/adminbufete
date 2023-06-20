@@ -75,6 +75,10 @@ var calendar;
                  event.extendedProps.invitados = evento.usuarios.map((usuario) => usuario.nombres).join(', ');
 
               }
+              if (evento.tipo === 'cita') {
+                event.extendedProps.cliente = evento.cliente.nombres;
+
+              }
             
               return event;
             });            
@@ -122,6 +126,7 @@ var calendar;
       var titleInput;
       var timeFinReunion;
       var clienteId;
+
       
       var today = new Date();
       var yesterday = new Date(today);
@@ -135,6 +140,8 @@ var calendar;
         timeInput = document.getElementById('time');
         titleInput = document.getElementById('title');
         clienteId = document.getElementById('cliente');
+        // Asume que 'event' es el evento de la cita que se está mostrando en el modal
+
       } else if (tipo === 'reunion') {
         modal = document.getElementById('reunionModal');
         dateInput = document.getElementById('reunionDate');
@@ -312,6 +319,7 @@ var calendar;
     var eventEstado = document.getElementById('eventEstado');
     var eventHoraFin = document.getElementById('eventHoraFin');
     var deleteEventBtn = document.getElementById('deleteEventBtn');
+    var eventCliente = document.getElementById('eventCliente');
     // Campos adicionales para las reuniones
     var eventLugar = document.getElementById('eventLugar');
     var eventInvitados = document.getElementById('eventInvitados');
@@ -321,7 +329,7 @@ var calendar;
     eventHora.textContent = 'Hora Inicio: ' + info.event.start.toLocaleTimeString();
     eventEstado.textContent = 'Estado: ' + info.event.extendedProps.estado;
     eventHoraFin.textContent = 'Hora Fin: ' + info.event.extendedProps.horaFin;
-
+    eventCliente.textContent= 'cliente: '+info.event.extendedProps.cliente;
     var eventColor = info.event.color || info.event.backgroundColor || info.event.borderColor;
 
     if (eventColor === 'blue') {
@@ -329,11 +337,13 @@ var calendar;
         console.log('estamos en citas')
         eventLugar.style.display = 'none';
         eventInvitados.style.display = 'none';
+        
     } else if (eventColor === 'red') {
         // Es una reunión, mostrar los campos de la reunión y llenarlos con la información correspondiente
         console.log('estamos en reuniones')
         eventLugar.style.display = 'block';
         eventInvitados.style.display = 'block';
+        eventCliente.style.display='none';
         eventLugar.textContent = 'Lugar: ' + info.event.extendedProps.lugar; // Asume que el evento tiene una propiedad 'lugar'
         eventInvitados.textContent = 'Invitados: ' + info.event.extendedProps.invitados; // Asume que el evento tiene una propiedad 'invitados'
     }
@@ -599,10 +609,5 @@ var calendar;
           });
       }
     });
-  }
-  
-  
-  
-  
-  
+}
   

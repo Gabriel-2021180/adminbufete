@@ -32,7 +32,7 @@ exports.getCitasJSON = async (req, res) => {
       activo: true,
       abogado: usuarioActual,
       fecha: { $gte: fechaActual } // Filtrar las citas de hoy y futuras
-    }).populate('abogado', 'nombres');
+    }).populate('abogado', 'nombres').populate('cliente', 'nombres');;
 
     // Convertir las fechas a una cadena sin convertir la zona horaria
     const citasConFechasUTC = citas.map((cita) => {

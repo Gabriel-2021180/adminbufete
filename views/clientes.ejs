@@ -13,12 +13,26 @@
   }
  
 }
+#layoutOnSection{
+        display: none;
+        width: 100px;
+  height: 100px;
+  font-size: 25px;
 
+}
+    @media print {
+  #layoutInSection {
+    display: none;
+  }
+  #layoutOnSection{
+    display: block;
+    margin-left: 40px;
+  }}
 </style>
 <i style="font-style: normal;" id="layoutInSection">
     <%-include('../views/layouts/LayoutIn.ejs')%>
 </i>
-
+<img src="https://storage.googleapis.com/primerstorage/LogoA-removebg-preview.png" alt="" id="layoutOnSection">
 <div class="content">
     <h2 style="color: white;">Lista de Clientes</h2>
         <i style="font-style: normal;" id="layoutInSection">
@@ -28,13 +42,12 @@
     
     <div style="overflow: hidden;">
         <div class="text-right">
-    <a href="#" class="btn btn-primary" id="layoutInSection">
-        <i class="fas fa-plus"></i><i class="fas fa-user"></i>
-    </a>
+<!-- Botón para abrir el modal -->
     <a href="/clientesInactivos" class="btn btn-primary" id="layoutInSection">
-
-            
         <i class="bi bi-recycle"></i><i class="fas fa-user"></i>
+    </a>
+
+  
     </a>
      <!-- Botón para abrir el modal -->
      <i style="font-style: normal;" id='layoutInSection'>
@@ -45,13 +58,14 @@
 <script>
     document.getElementById('print-button').addEventListener('click', function() {
      // Ocultar la sección LayoutIn antes de imprimir
-     document.getElementById('layoutInSection').style.display = 'none';
-      
-      // Llamar a la función de impresión
-      window.print();
-     // Restaurar la visibilidad de la sección LayoutIn después de imprimir
+  document.getElementById('layoutInSection').style.display = 'none';
+  document.getElementById('layoutOnSection').style.display = 'block';
+  // Llamar a la función de impresión
+  window.print();
+
+  // Restaurar la visibilidad de la sección LayoutIn después de imprimir
   document.getElementById('layoutInSection').style.display = 'block';
-      
+  document.getElementById('layoutOnSection').style.display = 'none';
     });
     
         </script>

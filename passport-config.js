@@ -5,7 +5,12 @@ module.exports = function(passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'username' }, async (username, password, done) => {
       try {
-        const user = await BufeteUser.findOne({ username });
+        const user = await BufeteUser.findOne({ 
+          $or: [
+              { username: username },
+              { email: username }
+          ]
+      });
 
         if (!user) {
           
